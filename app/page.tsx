@@ -12,8 +12,6 @@ import {
 import ThemeToggle from "@/components/theme-toggle";
 import Starfield from "@/components/starfields";
 
-// ─── DATA ─────────────────────────────────────────────────────────────────────
-
 const featuredProjects = [
   {
     title: "ResearchFlow AI",
@@ -38,11 +36,12 @@ const featuredProjects = [
     image: "/projects/contextflow.png",
   },
   {
+    // FIX 4 — BM25 and 30% factual error claim removed; replaced with accurate description
     title: "DocuMind",
     description:
-      "Unlike off-the-shelf PDF chat tools, DocuMind handles multi-document cross-referencing and always surfaces the exact passage that generated each answer — making it auditable for professional use. Built a hybrid retrieval layer combining dense Pinecone vector search with BM25 sparse ranking to improve answer accuracy over single-strategy retrieval.",
+      "Unlike off-the-shelf PDF chat tools, DocuMind handles multi-document cross-referencing and always surfaces the exact passage that generated each answer — making it auditable for professional use. Built on Pinecone semantic search with GPT-4 generation and citation grounding for verifiable, transparent document Q&A.",
     insight:
-      "Pure vector search hallucinated on domain-specific terminology. Combining it with BM25 keyword matching cut factual errors by roughly 30% on my internal test set.",
+      "The core design principle: every answer must be traceable to a source passage. Surfacing the exact chunk that generated the response shifts user trust from 'I hope this is right' to 'I can verify this is right' — which matters most in professional document workflows.",
     stack: ["Python", "FastAPI", "React", "Pinecone", "OpenAI"],
     github: "https://github.com/krishnakoushik225/DocuMind",
     demo: null,
@@ -60,11 +59,12 @@ const featuredProjects = [
     image: "/projects/ecg-peft-benchmark.png",
   },
   {
+    // FIX 6 — locking terminology aligned: "optimistic locking" to match resume
     title: "APSRTC Duty Management Portal",
     description:
-      "Shift scheduling at scale has a classic concurrency problem: two managers assigning the same employee to overlapping duties. Built conflict-detection logic at the API layer using database-level row locking, preventing double-assignment races without surfacing complexity to the UI. Serves 500+ transport authority employees across duty assignment, leave approvals, and attendance tracking.",
+      "Shift scheduling at scale has a classic concurrency problem: two managers assigning the same employee to overlapping duties. Built conflict-detection logic at the API layer using optimistic locking on the PostgreSQL schema, preventing double-assignment races without surfacing complexity to the UI. Serves 500+ transport authority employees across duty assignment, leave approvals, and attendance tracking.",
     insight:
-      "Initially handled conflicts at the application layer — which failed under concurrent load. Moving the lock to the DB transaction made the system race-condition-free regardless of how many managers were active simultaneously.",
+      "Initially handled conflicts at the application layer — which failed under concurrent load. Moving to optimistic locking at the database transaction level made the system race-condition-free regardless of how many managers were active simultaneously.",
     stack: ["React", "Spring Boot", "PostgreSQL", "Spring Security", "Docker"],
     github: "https://github.com/krishnakoushik225/APSRTC-Duty-Management-Portal",
     demo: null,
@@ -96,69 +96,73 @@ const featuredProjects = [
 
 const enterpriseWork = [
   {
+    // FIX 3 — USF: 5,000+ daily users (not 12,000+), 60% page load (not ~40%), 820ms→310ms (not ~800ms→200ms)
     title: "University of South Florida — Academic Planning Systems",
     badge: "Professional Work",
     description:
-      "Led feature development and system modernization on a 4-person engineering team, owning work end-to-end from API design through AKS deployment — shipping to 12,000+ students across USF's academic planning infrastructure.",
+      "Led feature development and system modernization on a 4-person engineering team, owning work end-to-end from API design through AKS deployment — shipping to 5,000+ daily users across USF's academic planning infrastructure.",
     highlights: [
-      "Owned migration of 3 legacy scheduling modules from WebForms to React + TypeScript, reducing page load time by ~40% and eliminating a class of session-state bugs",
-      "Designed ASP.NET Core APIs with Redis caching and SQL Server, cutting average API response time from ~800ms to under 200ms across high-traffic enrollment windows",
-      "Improved Azure AKS release pipeline with blue-green deployment support, enabling weekly releases where bi-weekly was the previous maximum safe cadence",
+      "Modernised legacy PHP scheduling modules to React + TypeScript, reducing page load time by 60% and eliminating a class of session-state bugs across 8+ modules",
+      "Designed ASP.NET Core APIs with Redis caching and SQL Server composite indexing, cutting average API response time from 820ms to 310ms across high-traffic enrollment windows",
+      "Owned Azure AKS blue/green CI/CD pipeline — 99.6% uptime, deployment cycle reduced from 3 days to under 3 hours",
     ],
   },
   {
+    // FIX 2 — Optum: Kafka at 3,500+ events/min (not 50K+ daily); MTTR 35% (not 4hrs→90min)
     title: "Optum — Healthcare Application Engineering",
     badge: "Professional Work",
     description:
       "Built HIPAA-compliant cloud-native applications processing 100K+ patient health records, with a focus on reliability, observability, and PHI-safe data handling across Azure-based services.",
     highlights: [
-      "Developed Angular + ASP.NET Core application features with HIPAA-compliant data handling — PHI never logged, cached, or surfaced in error traces",
-      "Built Kafka event pipelines handling 50K+ daily health integration events; measured 99.9% reliability over a 6-month production window via Azure App Insights",
-      "Reduced mean time to recovery from ~4 hours to under 90 minutes by instrumenting distributed traces across 6 microservices and adding structured alerting thresholds",
+      "Developed Angular + ASP.NET Core microservices with HIPAA-compliant data handling — PHI never logged, cached, or surfaced in error traces",
+      "Built event-driven Kafka data pipelines at 3,500+ events/min with Cosmos DB multi-region geo-replication and SQL Server + PostgreSQL optimisation (30% faster queries)",
+      "Drove DRI on-call reliability via Application Insights distributed tracing and structured alerting — MTTR reduced 35%; automated 40% of manual workflows via PowerShell + Azure Functions",
     ],
   },
   {
+    // FIX 5 — BNP: 4 trading desks (not 5)
     title: "BNP Paribas — Financial Workflow Platforms",
     badge: "Professional Work",
     description:
-      "Contributed to internal financial platforms across an 8-month engagement, building real-time reporting dashboards and event-driven backend services used by trading and operations teams.",
+      "Contributed to internal financial platforms across a 6-month contract engagement, building real-time reporting dashboards and event-driven backend services used by trading and operations teams.",
     highlights: [
-      "Built real-time P&L dashboards used by 5 trading desks for daily risk reporting, consolidating data from 3 upstream systems into a single reconciled view",
-      "Developed Spring Boot REST APIs handling 10K+ daily financial workflow transactions with audit logging and role-gated access for compliance requirements",
-      "Introduced event-driven processing patterns using Spring Events, reducing end-to-end report generation latency by ~35% vs. synchronous polling",
+      "Built React/TypeScript P&L dashboards used by 4 trading desks for daily risk reporting, consolidating data from 3 upstream systems into a single reconciled view",
+      "Developed Spring Boot REST APIs handling 10K+ daily financial workflow transactions with JWT auth, rate limiting, audit logging, and role-gated access for compliance",
+      "Introduced Amazon SQS event-driven data pipelines with Celery async processing — reduced reconciliation errors 30%, saved 20 hrs/week",
     ],
   },
 ];
 
 const experience = [
   {
+    // FIX 1 — all dates aligned to resume: USF 08/2024, Optum 08/2023–08/2024, BNP 02/2023–07/2023, Rinex 06/2021–12/2021
     role: "Application Developer",
     org: "University of South Florida",
-    period: "Jan 2024 — Present",
+    period: "Aug 2024 — Present",
     summary:
-      "Own full-stack feature development on a 4-person team building academic systems for 12,000+ students. Work spans React/TypeScript frontend, ASP.NET Core APIs with Redis and SQL Server, and Azure AKS deployments — shipping weekly releases across USF's academic planning infrastructure.",
+      "Own full-stack feature development on a 4-person team building academic systems for 5,000+ daily users. Work spans React/TypeScript frontend, ASP.NET Core APIs with Redis and SQL Server, and Azure AKS deployments — shipping weekly releases across USF's academic planning infrastructure.",
     icon: "/companies/usf.jpeg",
   },
   {
     role: "Associate Software Developer",
     org: "Optum",
-    period: "Jun 2023 — Dec 2023",
+    period: "Aug 2023 — Aug 2024",
     summary:
-      "Developed HIPAA-compliant cloud-native healthcare applications processing 100K+ patient records. Built Angular + ASP.NET Core features, Kafka event pipelines, and Azure observability improvements across a cross-functional team serving health plan operations.",
+      "Developed HIPAA-compliant cloud-native healthcare applications processing 100K+ patient records. Built Angular + ASP.NET Core microservices, Kafka event pipelines at 3,500+ events/min, and Azure observability improvements across a cross-functional team serving health plan operations.",
     icon: "/companies/optum.png",
   },
   {
     role: "Software Engineer",
     org: "BNP Paribas",
-    period: "Jan 2023 — Aug 2023",
+    period: "Feb 2023 — Jul 2023",
     summary:
-      "Built real-time trading dashboards and Spring Boot APIs for enterprise financial workflow platforms across an 8-month contract engagement, processing 10K+ daily transactions with full audit trails for compliance.",
+      "Built real-time trading dashboards and Spring Boot APIs for enterprise financial workflow platforms across a 6-month contract engagement, processing 10K+ daily transactions with full audit trails for compliance.",
     icon: "/companies/BNPParibas.png",
   },
   {
     role: "Full Stack Intern",
     org: "Rinex Private Limited",
-    period: "Jun 2021 — Aug 2021",
+    period: "Jun 2021 — Dec 2021",
     summary:
       "Delivered workforce management features — duty scheduling, leave approval workflows, and JWT-based role access control — using React, Spring Boot, and PostgreSQL.",
     icon: "/companies/rinex.jpeg",
@@ -347,8 +351,6 @@ const NAV_LINKS = [
   { href: "#contact", label: "Contact" },
 ];
 
-// ─── ANIMATION ────────────────────────────────────────────────────────────────
-
 const fadeUp = {
   hidden: { opacity: 0, y: 28 },
   visible: (i: number = 0) => ({
@@ -356,8 +358,6 @@ const fadeUp = {
     transition: { duration: 0.75, delay: i * 0.07, ease: "easeOut" as const },
   }),
 };
-
-// ─── PROGRESS BAR ─────────────────────────────────────────────────────────────
 
 function ProgressBar() {
   const [pct, setPct] = useState(0);
@@ -371,14 +371,10 @@ function ProgressBar() {
     return () => window.removeEventListener("scroll", update);
   }, []);
   return (
-    <div
-      className="pointer-events-none fixed left-0 top-0 z-[200] h-[2px] transition-none"
-      style={{ width: `${pct}%`, background: "linear-gradient(90deg, #7C3AED, #9D4EDD)" }}
-    />
+    <div className="pointer-events-none fixed left-0 top-0 z-[200] h-[2px] transition-none"
+      style={{ width: `${pct}%`, background: "linear-gradient(90deg, #7C3AED, #9D4EDD)" }} />
   );
 }
-
-// ─── BACK TO TOP ──────────────────────────────────────────────────────────────
 
 function BackToTop() {
   const [visible, setVisible] = useState(false);
@@ -395,16 +391,13 @@ function BackToTop() {
           exit={{ opacity: 0, y: 10 }} transition={{ duration: 0.2 }}
           onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
           className="fixed bottom-8 right-8 z-50 flex h-10 w-10 items-center justify-center rounded-full border border-black/10 bg-white/80 text-slate-700 shadow-xl backdrop-blur-xl transition hover:border-[#9D4EDD]/40 hover:bg-[#9D4EDD] hover:text-white dark:border-white/10 dark:bg-[#0b1020]/80 dark:text-white/70 dark:hover:bg-[#9D4EDD] dark:hover:text-white"
-          aria-label="Back to top"
-        >
+          aria-label="Back to top">
           <ChevronUp className="h-4 w-4" />
         </motion.button>
       )}
     </AnimatePresence>
   );
 }
-
-// ─── MOBILE MENU ──────────────────────────────────────────────────────────────
 
 function MobileMenu({ open, onClose, activeSection }: {
   open: boolean; onClose: () => void; activeSection: string;
@@ -416,13 +409,11 @@ function MobileMenu({ open, onClose, activeSection }: {
           <motion.div
             initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
             transition={{ duration: 0.2 }} onClick={onClose}
-            className="fixed inset-0 z-[90] bg-black/60 backdrop-blur-sm lg:hidden"
-          />
+            className="fixed inset-0 z-[90] bg-black/60 backdrop-blur-sm lg:hidden" />
           <motion.div
             initial={{ x: "100%" }} animate={{ x: 0 }} exit={{ x: "100%" }}
             transition={{ duration: 0.3, ease: "easeOut" }}
-            className="fixed right-0 top-0 z-[95] flex h-full w-72 flex-col border-l border-white/10 bg-[#0b1020]/95 p-8 backdrop-blur-2xl lg:hidden"
-          >
+            className="fixed right-0 top-0 z-[95] flex h-full w-72 flex-col border-l border-white/10 bg-[#0b1020]/95 p-8 backdrop-blur-2xl lg:hidden">
             <div className="mb-10 flex items-center justify-between">
               <span className="text-lg font-bold text-white">
                 Krishna's <span className="text-[#9D4EDD]">Portfolio</span>
@@ -460,8 +451,6 @@ function MobileMenu({ open, onClose, activeSection }: {
   );
 }
 
-// ─── SECTION TITLE ────────────────────────────────────────────────────────────
-
 function SectionTitle({ eyebrow, title, description }: {
   eyebrow: string; title: React.ReactNode; description?: string;
 }) {
@@ -473,8 +462,6 @@ function SectionTitle({ eyebrow, title, description }: {
     </div>
   );
 }
-
-// ─── DOMAIN CARD ──────────────────────────────────────────────────────────────
 
 function DomainCard({ domain, index, expanded = false }: {
   domain: (typeof SKILL_DOMAINS)[0]; index: number; expanded?: boolean;
@@ -495,8 +482,7 @@ function DomainCard({ domain, index, expanded = false }: {
       }}
       onMouseLeave={(e) => {
         (e.currentTarget as HTMLElement).style.boxShadow = `0 0 0 1px rgba(${theme.accentRgb}, 0.08)`;
-      }}
-    >
+      }}>
       <div className="absolute inset-y-0 left-0 w-[3px] rounded-l-2xl transition-all duration-300 group-hover:w-[4px]"
         style={{ background: theme.accent }} />
       <div className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-500 group-hover:opacity-100"
@@ -531,8 +517,6 @@ function DomainCard({ domain, index, expanded = false }: {
   );
 }
 
-// ─── SKILLS SECTION ───────────────────────────────────────────────────────────
-
 function SkillsSection() {
   const [active, setActive] = useState<Tab>("All");
   const totalSkills = SKILL_DOMAINS.reduce((acc, d) => acc + d.skills.length, 0);
@@ -547,7 +531,6 @@ function SkillsSection() {
           description="A structured view of the languages, frameworks, platforms, and tools I use across full-stack engineering, cloud systems, and applied AI."
         />
       </motion.div>
-
       <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp} className="mt-10 flex flex-wrap gap-4">
         {[
           { label: "Total Skills", value: totalSkills },
@@ -561,11 +544,9 @@ function SkillsSection() {
           </div>
         ))}
       </motion.div>
-
       <motion.div
         initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp}
-        className="mt-10 flex gap-2 overflow-x-auto pb-2 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
-      >
+        className="mt-10 flex gap-2 overflow-x-auto pb-2 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
         {ALL_TABS.map((tab) => {
           const isActive = active === tab;
           const theme = tab !== "All" ? DOMAIN_THEMES[tab] : null;
@@ -584,19 +565,16 @@ function SkillsSection() {
                 border: "1px solid rgba(157,78,221,0.4)",
                 boxShadow: "0 4px 16px rgba(157,78,221,0.15)",
                 color: "#C084FC",
-              }) : {}}
-            >
+              }) : {}}>
               {tab === "All" ? "All Domains" : DOMAIN_THEMES[tab].label}
             </button>
           );
         })}
       </motion.div>
-
       <AnimatePresence mode="wait">
         <motion.div key={active} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -8 }} transition={{ duration: 0.25 }}
-          className={`mt-8 grid gap-4 ${active === "All" ? "sm:grid-cols-2 xl:grid-cols-3" : "grid-cols-1 max-w-4xl"}`}
-        >
+          className={`mt-8 grid gap-4 ${active === "All" ? "sm:grid-cols-2 xl:grid-cols-3" : "grid-cols-1 max-w-4xl"}`}>
           {visibleDomains.map((domain, i) => (
             <DomainCard key={domain.id} domain={domain} index={i} expanded={active !== "All"} />
           ))}
@@ -605,8 +583,6 @@ function SkillsSection() {
     </section>
   );
 }
-
-// ─── PAGE ─────────────────────────────────────────────────────────────────────
 
 export default function Portfolio() {
   const [activeSection, setActiveSection] = useState("home");
@@ -688,8 +664,6 @@ export default function Portfolio() {
                 <span className="text-slate-900 dark:text-white">Hi, I'm Krishna Koushik </span>
                 <span className="bg-gradient-to-r from-[#9D4EDD] to-[#7C3AED] bg-clip-text text-transparent">Unnam.</span>
               </h2>
-
-              {/* Role badge + GPA surfaced at top + availability */}
               <div className="mb-7 flex flex-wrap items-center gap-3">
                 <div className="inline-flex items-center rounded-full border border-black/10 bg-black/[0.03] px-5 py-2 text-[11px] uppercase tracking-[0.28em] text-slate-700 backdrop-blur dark:border-white/10 dark:bg-white/[0.04] dark:text-white/80">
                   Full-Stack Engineer • Cloud, Backend & Applied AI
@@ -702,17 +676,13 @@ export default function Portfolio() {
                   Available June 2026
                 </div>
               </div>
-
               <h1 className="max-w-[44rem] text-4xl font-semibold leading-[1.05] tracking-[-0.03em] text-slate-900 dark:text-white sm:text-5xl md:text-[3.5rem] xl:text-[4.25rem]">
                 I build reliable full-stack systems and AI products that ship.
               </h1>
-
               <p className="mt-8 max-w-[36rem] text-lg leading-8 text-slate-600 dark:text-white/60 md:text-[1.2rem]">
                 Full-stack engineer with 3.7+ years across healthcare, fintech, and academic platforms —
                 building with .NET, Java, Spring Boot, React, TypeScript, Azure, and LLM systems.
               </p>
-
-              {/* Currently learning — growth trajectory signal */}
               <div className="mt-6 flex items-start gap-3 rounded-2xl border border-black/8 bg-black/[0.02] px-5 py-3.5 dark:border-white/8 dark:bg-white/[0.025]">
                 <BookOpen className="mt-0.5 h-4 w-4 shrink-0 text-[#9D4EDD]" />
                 <p className="text-sm text-slate-600 dark:text-white/55">
@@ -720,7 +690,6 @@ export default function Portfolio() {
                   multi-agent coordination patterns, Rust for systems programming, and real-time inference optimisation with vLLM.
                 </p>
               </div>
-
               <div className="mt-10 flex flex-wrap gap-4">
                 <a href="#projects" className="inline-flex items-center rounded-full bg-gradient-to-r from-[#7C3AED] to-[#9D4EDD] px-6 py-3 text-sm font-medium text-white transition hover:opacity-95">
                   View Projects <ArrowRight className="ml-2 h-4 w-4" />
@@ -730,7 +699,6 @@ export default function Portfolio() {
                   Resume <Download className="ml-2 h-4 w-4" />
                 </a>
               </div>
-
               <div className="mt-10 flex items-center gap-4 text-slate-500 dark:text-white/55">
                 {[
                   { href: "https://github.com/krishnakoushik225", icon: <Github className="h-5 w-5" />, label: "GitHub" },
@@ -753,8 +721,7 @@ export default function Portfolio() {
               initial={{ opacity: 0, y: 28, scale: 0.98 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
               transition={{ duration: 0.8, delay: 0.08, ease: "easeOut" }}
-              className="relative flex justify-center xl:justify-end"
-            >
+              className="relative flex justify-center xl:justify-end">
               <motion.div animate={{ y: [0, -8, 0] }} transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
                 className="relative w-full max-w-[31rem] xl:max-w-[34rem]">
                 <div className="absolute -inset-4 rounded-[2.3rem] bg-black/5 blur-2xl dark:bg-white/5" />
@@ -788,7 +755,7 @@ export default function Portfolio() {
             </motion.div>
           </section>
 
-          {/* ── ABOUT — moved up, now has concrete engineering opinions ── */}
+          {/* ── ABOUT ── */}
           <section id="about" className="grid gap-12 xl:grid-cols-[0.95fr_1.05fr] xl:items-start">
             <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp}>
               <SectionTitle
@@ -804,10 +771,9 @@ export default function Portfolio() {
                 at Optum and BNP Paribas, owned features end-to-end at USF, and built agentic AI pipelines that
                 go meaningfully beyond demo quality.
               </p>
-              {/* Concrete engineering opinions — replaces generic values language */}
               <p className="text-xl leading-9">
                 I learned the hard way at USF that optimising for speed before observability creates a maintenance
-                trap. We shipped a Redis caching layer that shaved 600ms off API responses — and then spent two
+                trap. We shipped a Redis caching layer that shaved 500ms off API responses — and then spent two
                 weeks debugging a cache invalidation bug that only appeared under concurrent load. Now I instrument
                 everything before I optimise anything.
               </p>
@@ -831,22 +797,18 @@ export default function Portfolio() {
                 description="Each project includes the engineering decision that mattered most — not just what was built, but why it was built that way."
               />
             </motion.div>
-
             <div className="mt-14 grid gap-6 md:grid-cols-2 xl:grid-cols-3">
               {featuredProjects.map((project, index) => (
                 <motion.article key={project.title} custom={index} initial="hidden" whileInView="visible"
                   viewport={{ once: true, amount: 0.15 }} variants={fadeUp}
                   className="group overflow-hidden rounded-[1.8rem] border border-black/10 bg-white/40 backdrop-blur-xl transition hover:-translate-y-2 hover:shadow-xl hover:border-black/18 dark:border-white/10 dark:bg-white/[0.03] dark:hover:border-white/18">
-                  {/* Image with gradient fallback */}
                   <div
                     className="aspect-[16/10] overflow-hidden border-b border-black/10 dark:border-white/10"
-                    style={{ background: "linear-gradient(135deg, #1e1b4b 0%, #312e81 50%, #4c1d95 100%)" }}
-                  >
+                    style={{ background: "linear-gradient(135deg, #1e1b4b 0%, #312e81 50%, #4c1d95 100%)" }}>
                     <img src={project.image} alt={project.title}
                       className="h-full w-full object-cover transition duration-500 group-hover:scale-[1.03]"
                       onError={(e) => { e.currentTarget.style.display = "none"; }} />
                   </div>
-
                   <div className="p-6">
                     <div className="flex items-start justify-between gap-4">
                       <h3 className="text-[1.35rem] font-semibold tracking-[-0.03em] text-slate-900 dark:text-white">{project.title}</h3>
@@ -865,15 +827,11 @@ export default function Portfolio() {
                         </a>
                       </div>
                     </div>
-
                     <p className="mt-4 text-[0.96rem] leading-7 text-slate-600 dark:text-white/58">{project.description}</p>
-
-                    {/* Key engineering insight — the "so what" for senior engineers */}
                     <div className="mt-4 rounded-xl border border-[#9D4EDD]/15 bg-[#9D4EDD]/[0.04] px-4 py-3">
                       <p className="mb-1 text-[9px] uppercase tracking-[0.28em] text-[#9D4EDD]/70">Key insight</p>
                       <p className="text-[11px] leading-6 text-slate-600 dark:text-white/55">{project.insight}</p>
                     </div>
-
                     <div className="mt-5">
                       <p className="mb-3 text-xs uppercase tracking-[0.24em] text-slate-500 dark:text-white/45">Tech Stack</p>
                       <div className="flex flex-wrap gap-2">
@@ -893,7 +851,6 @@ export default function Portfolio() {
             <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp}>
               <SectionTitle
                 eyebrow="Professional Work"
-                //title="Enterprise platforms I helped build"
                 title={<>Enterprise platforms <span className="text-[#9D4EDD]">I helped build</span></>}
                 description="End-to-end ownership across healthcare, fintech, and academic systems — not just contributions, but shipped outcomes."
               />
@@ -1017,7 +974,6 @@ export default function Portfolio() {
                 and grow alongside engineers who take correctness and craft seriously.
               </p>
             </div>
-
             <div className="mx-auto mt-12 grid max-w-3xl gap-4 sm:grid-cols-3">
               {lookingFor.map((card) => (
                 <div key={card.label} className="rounded-2xl border border-black/10 bg-black/[0.02] p-5 dark:border-white/10 dark:bg-white/[0.03]">
@@ -1033,7 +989,6 @@ export default function Portfolio() {
                 </div>
               ))}
             </div>
-
             <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
               <a href="mailto:krishnakoushiku@gmail.com"
                 className="inline-flex items-center rounded-full bg-gradient-to-r from-[#7C3AED] to-[#9D4EDD] px-7 py-3.5 text-sm font-medium text-white transition hover:opacity-95">
