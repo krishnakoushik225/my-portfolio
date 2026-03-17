@@ -239,7 +239,7 @@ Hosted on **Vercel Hobby** (free tier) — auto-deploys on every push to `main`,
 
 **Open to SWE · AI/ML Engineer · Full-Stack Engineer roles — US-wide relocation, available June 2026**
 
-[![View Portfolio](https://img.shields.io/badge/View_Live_Portfolio-9D4EDD?style=for-the-badge&logo=vercel&logoColor=white)](https://my-portfolio-vert-tau-48.vercel.app)
+[![View Portfolio](https://img.shields.io/badge/View_Live_Portfolio-9D4EDD?style=for-the-badge&logo=vercel&logoColor=white)](https://my-portfolio-1beeyxjwi-krishnakoushik225s-projects.vercel.app)
 [![Download Resume](https://img.shields.io/badge/Download_Resume-PDF-DC2626?style=for-the-badge&logo=adobeacrobatreader&logoColor=white)](https://my-portfolio-vert-tau-48.vercel.app/resume.pdf)
 
 *Built with Next.js 14 · TypeScript · Tailwind CSS · Deployed on Vercel*
