@@ -26,7 +26,7 @@ Production-grade personal portfolio built with **Next.js 14**, **TypeScript**, a
 
 Built to communicate **enterprise backend depth**, **full-stack range**, and **applied AI expertise** to engineering recruiters in under 30 seconds — no fluff, no stock art, real benchmark data and quantified impact throughout.
 
-> 3.7+ years across **Optum** (healthcare), **BNP Paribas** (fintech), and **University of South Florida** (academic platforms) — plus 7 independent projects spanning agentic AI, RAG systems, PEFT benchmarking, and multimodal generation.
+> 3.7 years across **Optum** (healthcare), **BNP Paribas** (fintech), and **University of South Florida** (academic platforms) — plus 7 independent projects spanning agentic AI, RAG systems, PEFT benchmarking, and multimodal generation.
 
 ---
 
