@@ -1,0 +1,265 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500" width="800" height="500">
+  <defs>
+    <!-- Backgrounds -->
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#050210"/>
+      <stop offset="55%" stop-color="#0d0520"/>
+      <stop offset="100%" stop-color="#1a0535"/>
+    </linearGradient>
+    <linearGradient id="bgGlow" x1="50%" y1="0%" x2="50%" y2="100%">
+      <stop offset="0%" stop-color="#7C3AED" stop-opacity="0.07"/>
+      <stop offset="100%" stop-color="#7C3AED" stop-opacity="0"/>
+    </linearGradient>
+
+    <!-- Box gradients -->
+    <linearGradient id="blueBox" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#1E3A8A"/>
+      <stop offset="100%" stop-color="#1E40AF" stop-opacity="0.7"/>
+    </linearGradient>
+    <linearGradient id="purpleBox" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#5B21B6"/>
+      <stop offset="100%" stop-color="#4C1D95" stop-opacity="0.8"/>
+    </linearGradient>
+    <linearGradient id="purpleBox2" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#6D28D9"/>
+      <stop offset="100%" stop-color="#5B21B6" stop-opacity="0.8"/>
+    </linearGradient>
+    <linearGradient id="amberBox" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#92400E"/>
+      <stop offset="100%" stop-color="#78350F" stop-opacity="0.8"/>
+    </linearGradient>
+    <linearGradient id="greenBox" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#065F46"/>
+      <stop offset="100%" stop-color="#047857" stop-opacity="0.8"/>
+    </linearGradient>
+
+    <!-- Glow filters -->
+    <filter id="glowPurple" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="5" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="glowBlue" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="4" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="glowGreen" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="4" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="glowAmber" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="4" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="textGlow" x="-10%" y="-30%" width="120%" height="160%">
+      <feGaussianBlur stdDeviation="3" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+
+    <!-- Arrow markers -->
+    <marker id="arrowPurple" markerWidth="7" markerHeight="7" refX="5" refY="3.5" orient="auto">
+      <polygon points="0 0, 7 3.5, 0 7" fill="#9D4EDD" opacity="0.9"/>
+    </marker>
+    <marker id="arrowAmber" markerWidth="7" markerHeight="7" refX="5" refY="3.5" orient="auto">
+      <polygon points="0 0, 7 3.5, 0 7" fill="#F59E0B" opacity="0.7"/>
+    </marker>
+    <marker id="arrowAmberUp" markerWidth="7" markerHeight="7" refX="3.5" refY="5" orient="auto">
+      <polygon points="0 7, 3.5 0, 7 7" fill="#F59E0B" opacity="0.7"/>
+    </marker>
+
+    <!-- Clip path for image bounds -->
+    <clipPath id="imgClip">
+      <rect width="800" height="500"/>
+    </clipPath>
+  </defs>
+
+  <!-- ── Background ── -->
+  <rect width="800" height="500" fill="url(#bg)"/>
+  <rect width="800" height="500" fill="url(#bgGlow)"/>
+
+  <!-- Subtle dot grid -->
+  <g opacity="0.18">
+    <pattern id="dots" x="0" y="0" width="28" height="28" patternUnits="userSpaceOnUse">
+      <circle cx="14" cy="14" r="0.9" fill="#9D4EDD"/>
+    </pattern>
+    <rect width="800" height="500" fill="url(#dots)"/>
+  </g>
+
+  <!-- Radial glow center -->
+  <ellipse cx="400" cy="220" rx="340" ry="180" fill="#7C3AED" opacity="0.045"/>
+
+  <!-- ── Background faint code watermark ── -->
+  <g font-family="'Courier New', monospace" font-size="8.5" fill="#9D4EDD" opacity="0.07">
+    <text x="18" y="120">class GraphState(TypedDict):</text>
+    <text x="18" y="132">    issue_url: str</text>
+    <text x="18" y="144">    patch_output: List[FileChange]</text>
+    <text x="18" y="156">    retry_count: int</text>
+    <text x="540" y="440">docker run --network none --cpus 0.5</text>
+    <text x="540" y="452">pytest . --tb=short 2>&amp;1 | tee report.txt</text>
+    <text x="540" y="464">ruff check . &amp;&amp; mypy . --ignore-missing-imports</text>
+  </g>
+
+  <!-- ── Title section ── -->
+  <text x="400" y="46" text-anchor="middle"
+        font-family="system-ui, -apple-system, sans-serif"
+        font-size="23" font-weight="800" fill="white"
+        letter-spacing="2.5" filter="url(#textGlow)">MULTI-AGENT CODE REPAIR</text>
+  <text x="400" y="66" text-anchor="middle"
+        font-family="system-ui, -apple-system, sans-serif"
+        font-size="10" fill="#C084FC" letter-spacing="1.8" opacity="0.9">
+    AUTONOMOUS GITHUB ISSUE  →  VALIDATED PATCH PIPELINE  ·  LANGGRAPH
+  </text>
+
+  <!-- Title underline -->
+  <line x1="180" y1="77" x2="620" y2="77" stroke="#7C3AED" stroke-width="0.6" opacity="0.5"/>
+
+  <!-- ── PIPELINE BOXES (y center = 185) ── -->
+
+  <!-- Box dimensions: 110×62, rx=10 -->
+  <!-- Centers: 85, 243, 401, 559, 717 -->
+
+  <!-- ── Box 1: GitHub Issue (blue) ── -->
+  <g filter="url(#glowBlue)">
+    <rect x="30" y="154" width="110" height="62" rx="10" fill="url(#blueBox)" stroke="#3B82F6" stroke-width="1.4" opacity="0.95"/>
+  </g>
+  <!-- GitHub icon circle -->
+  <circle cx="85" cy="168" r="6" fill="none" stroke="#60A5FA" stroke-width="1.5" opacity="0.8"/>
+  <text x="85" y="172" text-anchor="middle" font-family="monospace" font-size="7" fill="#60A5FA" font-weight="bold">#</text>
+  <!-- Label -->
+  <text x="85" y="186" text-anchor="middle" font-family="system-ui, sans-serif" font-size="9.5" font-weight="700" fill="#93C5FD">GitHub</text>
+  <text x="85" y="199" text-anchor="middle" font-family="system-ui, sans-serif" font-size="9.5" font-weight="700" fill="#93C5FD">Issue</text>
+  <!-- Sub-label -->
+  <text x="85" y="211" text-anchor="middle" font-family="monospace" font-size="7" fill="#60A5FA" opacity="0.7">INPUT</text>
+
+  <!-- Arrow 1→2 -->
+  <line x1="140" y1="185" x2="183" y2="185" stroke="#9D4EDD" stroke-width="1.5" marker-end="url(#arrowPurple)" opacity="0.85"/>
+
+  <!-- ── Box 2: Research + Plan (purple) ── -->
+  <g filter="url(#glowPurple)">
+    <rect x="188" y="154" width="110" height="62" rx="10" fill="url(#purpleBox)" stroke="#8B5CF6" stroke-width="1.4" opacity="0.95"/>
+  </g>
+  <!-- Icon: magnifier -->
+  <circle cx="243" cy="168" r="5" fill="none" stroke="#A78BFA" stroke-width="1.4" opacity="0.8"/>
+  <line x1="247" y1="172" x2="251" y2="176" stroke="#A78BFA" stroke-width="1.5" opacity="0.8"/>
+  <text x="243" y="186" text-anchor="middle" font-family="system-ui, sans-serif" font-size="9.5" font-weight="700" fill="#C4B5FD">Research</text>
+  <text x="243" y="199" text-anchor="middle" font-family="system-ui, sans-serif" font-size="9.5" font-weight="700" fill="#C4B5FD">+ Plan</text>
+  <text x="243" y="211" text-anchor="middle" font-family="monospace" font-size="7" fill="#A78BFA" opacity="0.7">AGENT</text>
+
+  <!-- Arrow 2→3 -->
+  <line x1="298" y1="185" x2="341" y2="185" stroke="#9D4EDD" stroke-width="1.5" marker-end="url(#arrowPurple)" opacity="0.85"/>
+
+  <!-- ── Box 3: Patch Agent (brighter purple) ── -->
+  <g filter="url(#glowPurple)">
+    <rect x="346" y="154" width="110" height="62" rx="10" fill="url(#purpleBox2)" stroke="#9D4EDD" stroke-width="1.8" opacity="0.98"/>
+  </g>
+  <!-- Icon: wrench/patch symbol -->
+  <text x="401" y="171" text-anchor="middle" font-family="monospace" font-size="11" fill="#E9D5FF" opacity="0.9">{ }</text>
+  <text x="401" y="186" text-anchor="middle" font-family="system-ui, sans-serif" font-size="9.5" font-weight="700" fill="#E9D5FF">Patch</text>
+  <text x="401" y="199" text-anchor="middle" font-family="system-ui, sans-serif" font-size="9.5" font-weight="700" fill="#E9D5FF">Agent</text>
+  <text x="401" y="211" text-anchor="middle" font-family="monospace" font-size="7" fill="#C084FC" opacity="0.8">SEARCH/REPLACE</text>
+
+  <!-- Arrow 3→4 -->
+  <line x1="456" y1="185" x2="499" y2="185" stroke="#9D4EDD" stroke-width="1.5" marker-end="url(#arrowPurple)" opacity="0.85"/>
+
+  <!-- ── Box 4: Validation / Docker (amber) ── -->
+  <g filter="url(#glowAmber)">
+    <rect x="504" y="154" width="110" height="62" rx="10" fill="url(#amberBox)" stroke="#F59E0B" stroke-width="1.4" opacity="0.95"/>
+  </g>
+  <!-- Docker whale icon simplified -->
+  <rect x="549" y="160" width="20" height="12" rx="2" fill="none" stroke="#FCD34D" stroke-width="1.2" opacity="0.8"/>
+  <rect x="552" y="157" width="4" height="4" rx="1" fill="#FCD34D" opacity="0.7"/>
+  <rect x="558" y="155" width="4" height="6" rx="1" fill="#FCD34D" opacity="0.7"/>
+  <text x="559" y="186" text-anchor="middle" font-family="system-ui, sans-serif" font-size="9.5" font-weight="700" fill="#FDE68A">Validate</text>
+  <text x="559" y="199" text-anchor="middle" font-family="monospace" font-size="8" fill="#FCD34D">Docker ✓</text>
+  <text x="559" y="211" text-anchor="middle" font-family="monospace" font-size="7" fill="#F59E0B" opacity="0.8">SANDBOX</text>
+
+  <!-- Arrow 4→5 -->
+  <line x1="614" y1="185" x2="657" y2="185" stroke="#10B981" stroke-width="1.5" marker-end="url(#arrowPurple)" opacity="0.85"/>
+
+  <!-- ── Box 5: Pull Request (green) ── -->
+  <g filter="url(#glowGreen)">
+    <rect x="662" y="154" width="110" height="62" rx="10" fill="url(#greenBox)" stroke="#10B981" stroke-width="1.4" opacity="0.95"/>
+  </g>
+  <!-- PR checkmark icon -->
+  <circle cx="717" cy="167" r="6" fill="none" stroke="#34D399" stroke-width="1.4" opacity="0.85"/>
+  <polyline points="713,167 716,170 721,163" fill="none" stroke="#34D399" stroke-width="1.5" stroke-linecap="round"/>
+  <text x="717" y="186" text-anchor="middle" font-family="system-ui, sans-serif" font-size="9.5" font-weight="700" fill="#6EE7B7">Pull</text>
+  <text x="717" y="199" text-anchor="middle" font-family="system-ui, sans-serif" font-size="9.5" font-weight="700" fill="#6EE7B7">Request</text>
+  <text x="717" y="211" text-anchor="middle" font-family="monospace" font-size="7" fill="#34D399" opacity="0.8">OUTPUT</text>
+
+  <!-- ── Retry loop (dashed amber arc below pipeline) ── -->
+  <!-- Down from box 4 bottom, left to box 3, up -->
+  <path d="M 559 216 L 559 248 L 401 248 L 401 216"
+        fill="none" stroke="#F59E0B" stroke-width="1.3"
+        stroke-dasharray="4,3" opacity="0.6"
+        marker-end="url(#arrowAmberUp)"/>
+  <text x="480" y="263" text-anchor="middle"
+        font-family="monospace" font-size="8" fill="#F59E0B" opacity="0.65">retry on failure  (max 3 attempts)</text>
+
+  <!-- ── State schema strip ── -->
+  <rect x="30" y="282" width="740" height="26" rx="6" fill="#1a0535" stroke="#7C3AED" stroke-width="0.6" opacity="0.7"/>
+  <text x="400" y="298" text-anchor="middle" font-family="monospace" font-size="8.5" fill="#C084FC" opacity="0.85">
+    GraphState { issue_url · research_output · patch_output · validation_output · retry_count · final_status }
+  </text>
+
+  <!-- ── Docker sandbox block ── -->
+  <rect x="30" y="323" width="740" height="58" rx="10" fill="#0c0118" stroke="#F59E0B" stroke-width="1.2" opacity="0.75"/>
+  <!-- Header bar -->
+  <rect x="30" y="323" width="740" height="22" rx="10" fill="#78350F" opacity="0.5"/>
+  <!-- Round clip header bottom corners -->
+  <rect x="30" y="335" width="740" height="10" fill="#78350F" opacity="0.5"/>
+
+  <!-- Terminal dots -->
+  <circle cx="50" cy="334" r="3.5" fill="#EF4444" opacity="0.7"/>
+  <circle cx="63" cy="334" r="3.5" fill="#F59E0B" opacity="0.7"/>
+  <circle cx="76" cy="334" r="3.5" fill="#10B981" opacity="0.7"/>
+
+  <text x="400" y="337" text-anchor="middle" font-family="monospace" font-size="8.5" fill="#FCD34D" letter-spacing="1.5">DOCKER SANDBOX  ·  --network=none  ·  CPU/mem quotas  ·  isolated execution</text>
+  <!-- Commands -->
+  <text x="60" y="356" font-family="monospace" font-size="8.5" fill="#34D399">$ pytest . --tb=short</text>
+  <text x="250" y="356" font-family="monospace" font-size="8.5" fill="#60A5FA">$ ruff check .</text>
+  <text x="400" y="356" font-family="monospace" font-size="8.5" fill="#A78BFA">$ mypy . --ignore-missing-imports</text>
+  <text x="660" y="356" font-family="monospace" font-size="8.5" fill="#FCD34D" opacity="0.8">→ PR  /  human-review</text>
+  <text x="60" y="372" font-family="monospace" font-size="8" fill="#34D399" opacity="0.75">1,436 passed  ·  0 errors  ·  clean</text>
+
+  <!-- ── Stats strip ── -->
+  <!-- Chip 1 -->
+  <rect x="30" y="398" width="160" height="40" rx="8" fill="#0a1628" stroke="#3B82F6" stroke-width="1" opacity="0.85"/>
+  <text x="110" y="414" text-anchor="middle" font-family="system-ui, sans-serif" font-size="17" font-weight="800" fill="#60A5FA" filter="url(#glowBlue)">1,436</text>
+  <text x="110" y="430" text-anchor="middle" font-family="monospace" font-size="8" fill="#93C5FD" opacity="0.8">Tests Passing</text>
+
+  <!-- Chip 2 -->
+  <rect x="205" y="398" width="130" height="40" rx="8" fill="#0a1628" stroke="#10B981" stroke-width="1" opacity="0.85"/>
+  <text x="270" y="414" text-anchor="middle" font-family="monospace" font-size="13" font-weight="800" fill="#34D399" filter="url(#glowGreen)">Ruff + Mypy</text>
+  <text x="270" y="430" text-anchor="middle" font-family="monospace" font-size="8" fill="#6EE7B7" opacity="0.8">Lint + Types Clean</text>
+
+  <!-- Chip 3 -->
+  <rect x="350" y="398" width="120" height="40" rx="8" fill="#0a1628" stroke="#9D4EDD" stroke-width="1" opacity="0.85"/>
+  <text x="410" y="414" text-anchor="middle" font-family="system-ui, sans-serif" font-size="17" font-weight="800" fill="#C084FC" filter="url(#glowPurple)">~$0.35</text>
+  <text x="410" y="430" text-anchor="middle" font-family="monospace" font-size="8" fill="#A78BFA" opacity="0.8">Per Run</text>
+
+  <!-- Chip 4 -->
+  <rect x="485" y="398" width="120" height="40" rx="8" fill="#0a1628" stroke="#F59E0B" stroke-width="1" opacity="0.85"/>
+  <text x="545" y="414" text-anchor="middle" font-family="system-ui, sans-serif" font-size="17" font-weight="800" fill="#FCD34D" filter="url(#glowAmber)">~2 min</text>
+  <text x="545" y="430" text-anchor="middle" font-family="monospace" font-size="8" fill="#FDE68A" opacity="0.8">Wall-Clock Time</text>
+
+  <!-- Chip 5: LangGraph badge -->
+  <rect x="620" y="398" width="150" height="40" rx="8" fill="#1a0535" stroke="#7C3AED" stroke-width="1.2" opacity="0.9"/>
+  <text x="695" y="413" text-anchor="middle" font-family="system-ui, sans-serif" font-size="10" font-weight="700" fill="#E9D5FF" letter-spacing="0.5">LangGraph</text>
+  <text x="695" y="428" text-anchor="middle" font-family="monospace" font-size="7.5" fill="#C084FC" opacity="0.8">Stateful · SQLite Checkpoints</text>
+
+  <!-- ── Top-right badge: LangGraph stateful ── -->
+  <rect x="572" y="95" width="198" height="44" rx="8" fill="#0d0520" stroke="#7C3AED" stroke-width="1" opacity="0.85"/>
+  <text x="671" y="112" text-anchor="middle" font-family="monospace" font-size="8.5" fill="#C084FC" opacity="0.9">state.patch_output = patches</text>
+  <text x="671" y="126" text-anchor="middle" font-family="monospace" font-size="8.5" fill="#34D399" opacity="0.85">if tests_passed: → open_pr()</text>
+  <text x="671" y="137" text-anchor="middle" font-family="monospace" font-size="7.5" fill="#F59E0B" opacity="0.7">else: retry → patch_agent()</text>
+
+  <!-- ── Left badge: pipeline label ── -->
+  <rect x="30" y="95" width="198" height="44" rx="8" fill="#0d0520" stroke="#3B82F6" stroke-width="1" opacity="0.85"/>
+  <text x="129" y="111" text-anchor="middle" font-family="monospace" font-size="8.5" fill="#93C5FD" opacity="0.9">base_commit_sha pinned</text>
+  <text x="129" y="124" text-anchor="middle" font-family="monospace" font-size="8.5" fill="#C084FC" opacity="0.85">search/replace grounded</text>
+  <text x="129" y="136" text-anchor="middle" font-family="monospace" font-size="7.5" fill="#60A5FA" opacity="0.7">in verbatim file content</text>
+
+  <!-- ── Center label between badges ── -->
+  <text x="400" y="114" text-anchor="middle" font-family="system-ui, sans-serif" font-size="9" fill="#9D4EDD" opacity="0.55" letter-spacing="1.2">PIPELINE STATE</text>
+  <text x="400" y="128" text-anchor="middle" font-family="monospace" font-size="8" fill="#7C3AED" opacity="0.45">Pydantic · SQLite · LiteLLM · GitHub API</text>
+</svg>

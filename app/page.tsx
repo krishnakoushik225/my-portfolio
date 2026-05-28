@@ -14,12 +14,23 @@ import Starfield from "@/components/starfields";
 
 const featuredProjects = [
   {
+    title: "Multi-Agent Code Repair",
+    description:
+      "An autonomous repair system that takes a GitHub issue URL and delivers a validated pull request — researching the codebase, planning a minimal fix, generating search-replace patches grounded in verbatim file content at a pinned commit SHA, and validating them in an isolated Docker sandbox (pytest, Ruff, Mypy). Demonstrated on real OSS issues: 1,436 tests passing, lint and type checks clean, in under 2 minutes at ~$0.35 per run.",
+    insight:
+      "Chose search/replace over unified diff because git apply breaks when hunks don't match the pinned tree — models hallucinate context lines. Grounding patches in fetched file content at a pinned commit SHA eliminated this entire class of failures.",
+    stack: ["Python", "LangGraph", "FastAPI", "Docker", "GitHub API"],
+    github: "https://github.com/krishnakoushik225/multi-agent-code-repair",
+    demo: null,
+    image: "/projects/multi-agent-code-repair.svg",
+  },
+  {
     title: "ResearchFlow AI",
     description:
-      "Manual research across 10+ sources takes hours and loses citation trails. ResearchFlow decomposes any query into parallel sub-tasks, retrieves and ranks web evidence, and delivers a cited, self-verified answer in under 30 seconds — using LangGraph's stateful graph to enable retry loops that a linear chain couldn't support.",
+      "Manual research across 10+ sources takes hours and loses citation trails. ResearchFlow decomposes any query into five specialised nodes (Planner → Decomposer → Search → Verifier → Synthesizer), retrieves and ranks web evidence via Tavily, and delivers a cited, self-verified answer in under 30 seconds — with a confidence-scored retry loop that re-queries when source relevance falls below threshold.",
     insight:
-      "Chose LangGraph over a simpler LangChain chain specifically because stateful graphs allow conditional retry edges when source relevance scores fall below a confidence threshold.",
-    stack: ["Python", "FastAPI", "LangGraph", "React", "Tavily"],
+      "Chose LangGraph over a simpler LangChain chain specifically because stateful graphs allow conditional retry edges when source relevance scores fall below a confidence threshold — a linear chain would require a separate orchestration wrapper to achieve the same retry behaviour.",
+    stack: ["Python", "FastAPI", "LangGraph", "Ollama", "Tavily", "React"],
     github: "https://github.com/krishnakoushik225/langgraph-research-agent",
     demo: null,
     image: "/projects/researchflow.png",
@@ -27,22 +38,21 @@ const featuredProjects = [
   {
     title: "ContextFlow AI",
     description:
-      "Most AI browser tools send your browsing data to external APIs. ContextFlow runs entirely on-device using Ollama — 100% local inference, zero external calls, no data leaves the browser. Summarises pages, explains highlighted text, and answers context-aware questions with sub-second response times on consumer hardware.",
+      "Most AI browser tools send your browsing data to external APIs. ContextFlow runs entirely on-device using Ollama — 100% local inference, zero external calls, no data leaves the browser. Summarises pages, explains highlighted text, and answers context-aware questions via a Chrome Manifest V3 extension with a React popup and an injected floating panel.",
     insight:
-      "The hardest part wasn't the LLM integration — it was building a streaming response protocol between the Chrome extension content script and the background service worker without a shared DOM.",
+      "The hardest part wasn't the LLM integration — it was building a streaming response protocol between the Chrome extension content script and the background service worker without a shared DOM, while keeping the extension fully offline-capable.",
     stack: ["React", "TypeScript", "Chrome Extension", "Ollama", "Llama 3.2"],
     github: "https://github.com/krishnakoushik225/contextflow-ai",
     demo: null,
     image: "/projects/contextflow.png",
   },
   {
-    // FIX 4 — BM25 and 30% factual error claim removed; replaced with accurate description
     title: "DocuMind",
     description:
-      "Unlike off-the-shelf PDF chat tools, DocuMind handles multi-document cross-referencing and always surfaces the exact passage that generated each answer — making it auditable for professional use. Built on Pinecone semantic search with GPT-4 generation and citation grounding for verifiable, transparent document Q&A.",
+      "Unlike off-the-shelf PDF chat tools, DocuMind handles per-document scoped queries via Pinecone metadata filtering and always surfaces the exact passage that generated each answer — making it auditable for professional use. Includes a LlamaIndex RelevancyEvaluator for scoring retrieval quality without labeled ground truth, and explicit empty-retrieval handling that returns 'No relevant information found' rather than hallucinating.",
     insight:
-      "The core design principle: every answer must be traceable to a source passage. Surfacing the exact chunk that generated the response shifts user trust from 'I hope this is right' to 'I can verify this is right' — which matters most in professional document workflows.",
-    stack: ["Python", "FastAPI", "React", "Pinecone", "OpenAI"],
+      "Per-document query scoping via Pinecone doc_id metadata filtering was the critical architectural decision: global index search caused cross-document contamination. Scoping retrieval per document shifted user trust from 'I hope this is right' to 'I can verify this is right.'",
+    stack: ["Python", "FastAPI", "React", "Pinecone", "OpenAI", "LlamaIndex"],
     github: "https://github.com/krishnakoushik225/DocuMind",
     demo: null,
     image: "/projects/documind.png",
@@ -50,19 +60,18 @@ const featuredProjects = [
   {
     title: "ECG-PEFT Bench",
     description:
-      "Fine-tuning cardiac foundation models from scratch is prohibitively expensive for most clinical teams. This benchmark compared LoRA, Adapter, Prefix, and Prompt Tuning across 3 models on a 10K+ ECG segment dataset — producing a model selection report that showed LoRA outperforming adapters by 4.2 F1 points with 60% fewer trainable parameters, directly informing compute allocation decisions for downstream clinical AI pipelines.",
+      "Fine-tuning cardiac foundation models from scratch is prohibitively expensive for most clinical teams. This benchmark compared LoRA vs. Adapter strategies across Wav2Vec2, HuBERT, and ECG-FM on 9,814 ECG test segments — finding Wav2Vec2+LoRA best for balanced screening (F1: 0.589, AUC: 0.620) and HuBERT+Adapter best for high-sensitivity triage (Recall: 0.859), both with 60% fewer trainable parameters than full fine-tuning.",
     insight:
-      "The clearest finding: prompt tuning degraded consistently on short ECG segments because it can't recover from insufficient context length — something that isn't obvious from NLP benchmarks.",
+      "The clearest finding: prompt tuning degraded consistently on short ECG segments because it can't recover from insufficient context length — something that isn't obvious from NLP benchmarks and only surfaces in domain-transfer experiments.",
     stack: ["Python", "PyTorch", "Transformers", "PEFT", "Medical AI"],
     github: "https://github.com/krishnakoushik225/ecg-peft-benchmark",
     demo: null,
     image: "/projects/ecg-peft-benchmark.png",
   },
   {
-    // FIX 6 — locking terminology aligned: "optimistic locking" to match resume
     title: "APSRTC Duty Management Portal",
     description:
-      "Shift scheduling at scale has a classic concurrency problem: two managers assigning the same employee to overlapping duties. Built conflict-detection logic at the API layer using optimistic locking on the PostgreSQL schema, preventing double-assignment races without surfacing complexity to the UI. Serves 500+ transport authority employees across duty assignment, leave approvals, and attendance tracking.",
+      "Shift scheduling at scale has a classic concurrency problem: two managers assigning the same employee to overlapping duties. Built conflict-detection using optimistic locking at the database transaction level, preventing double-assignment races without surfacing complexity to the UI. Serves 500+ transport authority employees across duty assignment, leave approvals, and OTP-based password recovery across 5 roles with JWT/RBAC.",
     insight:
       "Initially handled conflicts at the application layer — which failed under concurrent load. Moving to optimistic locking at the database transaction level made the system race-condition-free regardless of how many managers were active simultaneously.",
     stack: ["React", "Spring Boot", "PostgreSQL", "Spring Security", "Docker"],
@@ -71,11 +80,22 @@ const featuredProjects = [
     image: "/projects/apsrtc.png",
   },
   {
+    title: "CycleGAN: Monet ↔ Photo Translation",
+    description:
+      "Implements CycleGAN for unpaired image-to-image translation between Monet-style paintings and photographic landscapes, with controlled ablation studies on cycle-consistency weight (λ_cyc: 5, 10, 20) and identity loss (λ_id: 0.0, 0.1). Results show λ_cyc=10 produces the most visually balanced outputs, and identity loss significantly reduces color distortion during domain transfer.",
+    insight:
+      "The ablation on cycle-consistency weight reveals a non-obvious tradeoff: lower λ_cyc gives more stylistic freedom but weaker reconstruction fidelity; higher λ_cyc enforces structural consistency but limits stylization. Understanding this directly informs PEFT bottleneck sizing decisions in generative models.",
+    stack: ["Python", "PyTorch", "CycleGAN", "Computer Vision", "Ablation Study"],
+    github: "https://github.com/krishnakoushik225/CycleGAN-Monet-Photo-Translation-Cycle-Identity-Loss-Ablations-",
+    demo: null,
+    image: "/projects/CycleGAN-Monet-Photo-Translation.png",
+  },
+  {
     title: "GenDiff-PEFT",
     description:
-      "A research exploration into where parameter-efficient fine-tuning breaks down in generative models. Achieved a 2.1× training efficiency gain on conditional diffusion models while keeping FID scores within 8% of full fine-tuning. The findings directly shaped my PEFT strategy choices in ECG-PEFT — particularly around when adapter bottleneck sizes cause representational collapse.",
+      "Research investigation into parameter-efficient fine-tuning for conditional diffusion models on CIFAR-10, achieving a 17.1% FID improvement (290.19→240.48) and 85% reduction in training time (8.5h→1h) via classifier-free guidance, multi-resolution attention at 16×16, extended DDIM sampling from 50→100 steps, and AdamW with cosine annealing. The findings directly shaped PEFT strategy choices in ECG-PEFT.",
     insight:
-      "This is exploratory research, not a production system. Its value is in the negative results: understanding which PEFT configurations fail and why matters as much as which ones succeed.",
+      "This is exploratory research, not a production system. Its value is in the classifier-free guidance tradeoff: higher guidance → better fidelity, lower guidance → better diversity. Understanding which PEFT configurations fail and why matters as much as which ones succeed.",
     stack: ["Python", "PyTorch", "Diffusion Models", "PEFT", "Computer Vision"],
     github: "https://github.com/krishnakoushik225/GenDiff-PEFT-Efficient-Conditional-Diffusion-Optimization",
     demo: null,
@@ -84,9 +104,9 @@ const featuredProjects = [
   {
     title: "CLAP-Optimized AudioLDM",
     description:
-      "Text-to-audio generation at inference time produces variable-quality outputs. By generating N candidates and selecting via CLAP alignment score, improved benchmark quality by 15%+ with no model retraining — at the cost of N× inference time. The detailed cost-quality tradeoff analysis makes this a practical reference for teams deciding whether quality or latency is the bottleneck.",
+      "Text-to-audio generation at inference time produces variable-quality outputs. By generating N candidates per prompt and selecting via CLAP text-audio alignment score, CLAPScore improved ~40% at n=5 with no model retraining. Includes detailed cost-quality tradeoff analysis showing clear diminishing returns beyond ~7 samples — a practical reference for teams deciding whether quality or latency is the bottleneck.",
     insight:
-      "The tradeoff is non-linear: going from 1 to 4 candidates gives most of the quality gain; going from 4 to 8 adds cost with diminishing returns. The inflection point is the finding.",
+      "The tradeoff is non-linear: going from 1 to 5 candidates gives most of the quality gain (~40% CLAPScore improvement); going beyond 7 adds cost with sharply diminishing returns. The inflection point at n=5 is the finding — not the maximum achievable score.",
     stack: ["Python", "PyTorch", "AudioLDM", "CLAP", "Multimodal AI"],
     github: "https://github.com/krishnakoushik225/CLAP-Optimized-Text-to-Audio-Generation-AudioLDM-",
     demo: null,
@@ -96,76 +116,64 @@ const featuredProjects = [
 
 const enterpriseWork = [
   {
-    // FIX 3 — USF: 5,000+ daily users (not 12,000+), 60% page load (not ~40%), 820ms→310ms (not ~800ms→200ms)
     title: "University of South Florida — Academic Planning Systems",
     badge: "Professional Work",
     description:
       "Led feature development and system modernization on a 4-person engineering team, owning work end-to-end from API design through AKS deployment — shipping to 5,000+ daily users across USF's academic planning infrastructure.",
     highlights: [
-      "Modernised legacy PHP scheduling modules to React + TypeScript, reducing page load time by 60% and eliminating a class of session-state bugs across 8+ modules",
-      "Designed ASP.NET Core APIs with Redis caching and SQL Server composite indexing, cutting average API response time from 820ms to 310ms across high-traffic enrollment windows",
-      "Owned Azure AKS blue/green CI/CD pipeline — 99.6% uptime, deployment cycle reduced from 3 days to under 3 hours",
+      "Re-architected a legacy PHP monolith into Java/Spring Boot microservices using Domain-Driven Design, deployed on Azure AKS with blue/green GitHub Actions CI/CD — deployment cycle cut from 3 days to under 3 hours at 99.6% uptime",
+      "Rebuilt React frontend with Redux Toolkit, TanStack Query, and component-level code splitting — page load dropped 60%; Redis write-through caching and a composite SQL Server index on (student_id, term_id) cut API latency from 820ms to 310ms",
+      "Raised test coverage to 87% via TDD, contract testing, and SonarQube CI quality gates (JUnit 5, Mockito, Selenium E2E) — eliminated a class of regression slipping through quarterly releases",
     ],
   },
   {
-    // FIX 2 — Optum: Kafka at 3,500+ events/min (not 50K+ daily); MTTR 35% (not 4hrs→90min)
-    title: "Optum — Healthcare Application Engineering",
+    title: "Optum (UnitedHealth Group) — Healthcare Data Pipelines",
     badge: "Professional Work",
     description:
-      "Built HIPAA-compliant cloud-native applications processing 100K+ patient health records, with a focus on reliability, observability, and PHI-safe data handling across Azure-based services.",
+      "Built HIPAA-compliant Java/Spring Boot microservices and Kafka data pipelines processing patient health records for 200+ analysts, with a focus on reliability, observability, and PHI-safe data handling across Azure-based services.",
     highlights: [
-      "Developed Angular + ASP.NET Core microservices with HIPAA-compliant data handling — PHI never logged, cached, or surfaced in error traces",
-      "Built event-driven Kafka data pipelines at 3,500+ events/min with Cosmos DB multi-region geo-replication and SQL Server + PostgreSQL optimisation (30% faster queries)",
-      "Drove DRI on-call reliability via Application Insights distributed tracing and structured alerting — MTTR reduced 35%; automated 40% of manual workflows via PowerShell + Azure Functions",
+      "Designed and operated Kafka event pipelines at 3,500+ events/min with exactly-once delivery semantics and Cosmos DB multi-region geo-replication — 99.6% SLA across HIPAA-adjacent patient data flows",
+      "Standardised API contracts across 12 microservices: versioned endpoints, idempotency keys, token-bucket rate limiting, and circuit breakers; composite index redesign and connection pooling on PostgreSQL + SQL Server lifted query throughput 30%",
+      "Deployed Grafana/Splunk distributed tracing and authored DRI runbooks — MTTR dropped 35%; Python automation scripts saved 12 hrs/week; rewrote a core aggregation job from O(n log n) to O(n) using a hash-map pass",
     ],
   },
   {
-    // FIX 5 — BNP: 4 trading desks (not 5)
     title: "BNP Paribas — Financial Workflow Platforms",
     badge: "Professional Work",
     description:
-      "Contributed to internal financial platforms across a 6-month contract engagement, building real-time reporting dashboards and event-driven backend services used by trading and operations teams.",
+      "Replaced Excel-based reconciliation workflows with production Java/Spring Boot APIs and React/Angular trading dashboards across 4 trading desks on BNP Paribas's Centric platform, cutting errors 30% and saving 20 hrs/week of manual work.",
     highlights: [
-      "Built React/TypeScript P&L dashboards used by 4 trading desks for daily risk reporting, consolidating data from 3 upstream systems into a single reconciled view",
-      "Developed Spring Boot REST APIs handling 10K+ daily financial workflow transactions with JWT auth, rate limiting, audit logging, and role-gated access for compliance",
-      "Introduced Amazon SQS event-driven data pipelines with Celery async processing — reduced reconciliation errors 30%, saved 20 hrs/week",
+      "Built Spring Boot REST + SOAP APIs across 4 trading desks — eliminated manual Excel reconciliation; applied OWASP Top 10 mitigations, OAuth2/JWT RBAC, and TLS mutual auth; closed all open critical CVEs with zero regressions",
+      "Tuned Oracle SQL stored procedures and JVM heap/G1GC settings — high-frequency transaction latency cut 25%; Selenium E2E coverage (80%+) and Splunk dashboards reduced UI regression detection time 40%",
+      "Optimised React/Angular trading dashboards with Redux state management and async component loading — p99 render time under 400ms at peak market hours across all four desks",
     ],
   },
 ];
 
 const experience = [
   {
-    // FIX 1 — all dates aligned to resume: USF 08/2024, Optum 08/2023–08/2024, BNP 02/2023–07/2023, Rinex 06/2021–12/2021
-    role: "Application Developer",
+    role: "Full Stack Developer",
     org: "University of South Florida",
-    period: "Aug 2024 — Present",
+    period: "Sep 2024 — May 2026",
     summary:
-      "Own full-stack feature development on a 4-person team building academic systems for 5,000+ daily users. Work spans React/TypeScript frontend, ASP.NET Core APIs with Redis and SQL Server, and Azure AKS deployments — shipping weekly releases across USF's academic planning infrastructure.",
+      "Led full-stack feature development on a 4-person Agile/Scrum team, re-architecting a legacy PHP monolith into Java/Spring Boot microservices on Azure AKS and rebuilding the React frontend — shipping to 5,000+ daily users with 99.6% uptime across USF's academic planning infrastructure.",
     icon: "/companies/usf.jpeg",
   },
   {
-    role: "Associate Software Developer",
-    org: "Optum",
-    period: "Aug 2023 — Aug 2024",
+    role: "Associate Software Engineer",
+    org: "UnitedHealth Group (Optum)",
+    period: "Jul 2023 — Aug 2024",
     summary:
-      "Developed HIPAA-compliant cloud-native healthcare applications processing 100K+ patient records. Built Angular + ASP.NET Core microservices, Kafka event pipelines at 3,500+ events/min, and Azure observability improvements across a cross-functional team serving health plan operations.",
+      "Built HIPAA-compliant Java/Spring Boot microservices and Kafka data pipelines at 3,500+ events/min for 200+ healthcare analysts. Deployed Grafana/Splunk distributed tracing and authored DRI runbooks — MTTR dropped 35% and on-call handoffs became structured and repeatable.",
     icon: "/companies/optum.png",
   },
   {
     role: "Software Engineer",
     org: "BNP Paribas",
-    period: "Feb 2023 — Jul 2023",
+    period: "Jun 2022 — Jul 2023",
     summary:
-      "Built real-time trading dashboards and Spring Boot APIs for enterprise financial workflow platforms across a 6-month contract engagement, processing 10K+ daily transactions with full audit trails for compliance.",
-    icon: "/companies/BNPParibas.png",
-  },
-  {
-    role: "Full Stack Intern",
-    org: "Rinex Private Limited",
-    period: "Jun 2021 — Dec 2021",
-    summary:
-      "Delivered workforce management features — duty scheduling, leave approval workflows, and JWT-based role access control — using React, Spring Boot, and PostgreSQL.",
-    icon: "/companies/rinex.jpeg",
+      "Replaced Excel-based trading desk reconciliation with Java/Spring Boot REST + SOAP APIs across 4 desks on BNP Paribas's Centric platform, cutting errors 30% and saving 20 hrs/week. Applied OWASP Top 10, OAuth2/JWT RBAC, and TLS mutual auth — closed all open critical CVEs with zero regressions.",
+    icon: "/companies/bnpparibas.png",
   },
 ];
 
@@ -173,8 +181,8 @@ const education = [
   {
     degree: "M.S. in Computer Science and Engineering",
     school: "University of South Florida",
-    period: "2024 — 2026",
-    details: "GPA: 3.95/4.0 • Tampa, Florida",
+    period: "Aug 2024 — May 2026",
+    details: "GPA: 3.89/4.0 • Graduated May 2026 • Tampa, Florida",
     icon: "/companies/usf.jpeg",
   },
   {
@@ -200,7 +208,7 @@ const lookingFor = [
   {
     icon: <MapPin className="h-5 w-5" />,
     label: "Location",
-    items: ["Open to relocation (US-wide)", "Remote-friendly preferred", "Available June 2026"],
+    items: ["Open to relocation (US-wide)", "Remote-friendly preferred", "Available Now"],
   },
 ];
 
@@ -535,7 +543,7 @@ function SkillsSection() {
         {[
           { label: "Total Skills", value: totalSkills },
           { label: "Domains", value: SKILL_DOMAINS.length },
-          { label: "Years XP", value: "3.7+" },
+          { label: "Years XP", value: "4+" },
           { label: "Stack Depth", value: "Full" },
         ].map((s) => (
           <div key={s.label} className="flex items-center gap-3 rounded-xl border border-black/10 bg-white/40 px-4 py-2.5 backdrop-blur-xl dark:border-white/8 dark:bg-white/[0.025]">
@@ -669,19 +677,19 @@ export default function Portfolio() {
                   Full-Stack Engineer • Cloud, Backend & Applied AI
                 </div>
                 <div className="inline-flex items-center gap-1.5 rounded-full border border-violet-500/30 bg-violet-500/10 px-4 py-2 text-[11px] font-medium text-violet-600 dark:text-violet-400">
-                  M.S. CS @ USF · 3.95 GPA
+                  M.S. CS @ USF · 3.89 GPA
                 </div>
                 <div className="inline-flex items-center gap-2 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-4 py-2 text-[11px] font-medium text-emerald-600 dark:text-emerald-400">
                   <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-emerald-500 dark:bg-emerald-400" />
-                  Available June 2026
+                  Available Now
                 </div>
               </div>
               <h1 className="max-w-[44rem] text-4xl font-semibold leading-[1.05] tracking-[-0.03em] text-slate-900 dark:text-white sm:text-5xl md:text-[3.5rem] xl:text-[4.25rem]">
                 I build reliable full-stack systems and AI products that ship.
               </h1>
               <p className="mt-8 max-w-[36rem] text-lg leading-8 text-slate-600 dark:text-white/60 md:text-[1.2rem]">
-                Full-stack engineer with 3.7+ years across healthcare, fintech, and academic platforms —
-                building with .NET, Java, Spring Boot, React, TypeScript, Azure, and LLM systems.
+                Full-stack engineer with 4+ years across healthcare, fintech, and academic platforms —
+                building with Java, Spring Boot, React, TypeScript, Azure, and LLM systems.
               </p>
               <div className="mt-6 flex items-start gap-3 rounded-2xl border border-black/8 bg-black/[0.02] px-5 py-3.5 dark:border-white/8 dark:bg-white/[0.025]">
                 <BookOpen className="mt-0.5 h-4 w-4 shrink-0 text-[#9D4EDD]" />
@@ -746,7 +754,7 @@ export default function Portfolio() {
                       </div>
                       <div className="rounded-2xl border border-black/10 bg-black/[0.02] p-4 dark:border-white/10 dark:bg-white/[0.03]">
                         <p className="text-sm text-slate-500 dark:text-white/45">GPA</p>
-                        <p className="mt-2 text-base font-medium text-slate-900 dark:text-white/90">3.95 / 4.0 — M.S. CS</p>
+                        <p className="mt-2 text-base font-medium text-slate-900 dark:text-white/90">3.89 / 4.0 — M.S. CS</p>
                       </div>
                     </div>
                   </div>
@@ -766,7 +774,7 @@ export default function Portfolio() {
             <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp}
               className="max-w-3xl space-y-6 text-slate-600 dark:text-white/60">
               <p className="text-xl leading-9">
-                I'm a full-stack engineer with 3.7 years of enterprise experience across healthcare, fintech,
+                I'm a full-stack engineer with 4+ years of enterprise experience across healthcare, fintech,
                 and academic systems — and a parallel track in applied AI research. I've shipped production systems
                 at Optum and BNP Paribas, owned features end-to-end at USF, and built agentic AI pipelines that
                 go meaningfully beyond demo quality.
@@ -1005,7 +1013,7 @@ export default function Portfolio() {
         {/* ── FOOTER ── */}
         <footer className="mt-16 border-t border-black/10 py-8 dark:border-white/10">
           <div className="flex flex-col items-center justify-between gap-4 text-sm text-slate-500 dark:text-white/35 sm:flex-row">
-            <span>© 2025 Krishna Koushik Unnam. All rights reserved.</span>
+            <span>© 2026 Krishna Koushik Unnam. All rights reserved.</span>
             <div className="flex items-center gap-6">
               <a href="mailto:krishnakoushiku@gmail.com" className="transition hover:text-slate-900 dark:hover:text-white">Email</a>
               <a href="https://www.linkedin.com/in/krishna-koushik-unnam-a952741b5/" target="_blank" rel="noreferrer" className="transition hover:text-slate-900 dark:hover:text-white">LinkedIn</a>
