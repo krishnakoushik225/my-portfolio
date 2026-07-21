@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 340">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0a1020"/>
+      <stop offset="100%" style="stop-color:#1a2040"/>
+    </linearGradient>
+  </defs>
+  <rect width="600" height="340" fill="url(#bg)"/>
+  <!-- .NET logo-inspired hexagon -->
+  <polygon points="300,70 340,93 340,139 300,162 260,139 260,93" fill="none" stroke="#6366f1" stroke-width="2" opacity="0.5"/>
+  <text x="300" y="122" text-anchor="middle" fill="#a5b4fc" font-size="18" font-weight="800" font-family="Arial, sans-serif">.NET</text>
+  <!-- Stack indicators -->
+  <rect x="100" y="190" width="90"  height="26" rx="5" fill="#6366f1" opacity="0.15" stroke="#6366f1" stroke-width="1" stroke-opacity="0.3"/>
+  <rect x="205" y="190" width="90"  height="26" rx="5" fill="#6366f1" opacity="0.15" stroke="#6366f1" stroke-width="1" stroke-opacity="0.3"/>
+  <rect x="310" y="190" width="90"  height="26" rx="5" fill="#6366f1" opacity="0.15" stroke="#6366f1" stroke-width="1" stroke-opacity="0.3"/>
+  <rect x="415" y="190" width="90"  height="26" rx="5" fill="#6366f1" opacity="0.15" stroke="#6366f1" stroke-width="1" stroke-opacity="0.3"/>
+  <text x="145" y="207" text-anchor="middle" fill="#a5b4fc" font-size="10" font-family="monospace">ASP.NET Core</text>
+  <text x="250" y="207" text-anchor="middle" fill="#a5b4fc" font-size="10" font-family="monospace">React 19</text>
+  <text x="355" y="207" text-anchor="middle" fill="#a5b4fc" font-size="10" font-family="monospace">PostgreSQL</text>
+  <text x="460" y="207" text-anchor="middle" fill="#a5b4fc" font-size="10" font-family="monospace">Redis</text>
+  <!-- Title -->
+  <text x="300" y="260" text-anchor="middle" fill="white" font-size="22" font-weight="800" font-family="Arial, sans-serif">APSRTC Portal · .NET</text>
+  <text x="300" y="282" text-anchor="middle" fill="#a5b4fc" font-size="11" font-family="monospace" opacity="0.7">JWT Blacklisting · RBAC · EF Core · OpenAPI</text>
+  <rect x="185" y="298" width="230" height="24" rx="5" fill="#6366f1" opacity="0.1" stroke="#6366f1" stroke-width="1" stroke-opacity="0.3"/>
+  <text x="300" y="314" text-anchor="middle" fill="#c7d2fe" font-size="10" font-family="monospace">Layered Architecture · Docker Compose</text>
+</svg>

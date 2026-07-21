@@ -1,29 +1,278 @@
 @import "tailwindcss";
+
 @custom-variant dark (&:where(.dark, .dark *));
 
-@import "tailwindcss";
-
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+@theme {
+  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  scroll-behavior: smooth;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: #0d0d1f;
+  color: #f1f5f9;
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  transition: background-color 0.25s ease, color 0.25s ease;
+}
+
+/* ── Light mode base ─────────────────────────────────────────────────────── */
+html.light body {
+  background-color: #f1f5f9;
+  color: #0f172a;
+}
+
+/* Neutrals — darker for contrast on light backgrounds */
+html.light .text-white {
+  color: #0f172a !important;
+}
+html.light .text-slate-100 {
+  color: #0f172a !important;
+}
+html.light .text-slate-300 {
+  color: #1e293b !important;
+}
+html.light .text-slate-400 {
+  color: #334155 !important;
+}
+html.light .text-slate-500 {
+  color: #475569 !important;
+}
+html.light .text-slate-600 {
+  color: #334155 !important;
+}
+html.light .text-slate-700 {
+  color: #1e293b !important;
+}
+
+/* Accent text — dark-mode pastels → readable dark hues */
+html.light .text-purple-300,
+html.light .text-purple-400,
+html.light .group-hover\:text-purple-300:is(:where(.group):hover *) {
+  color: #6d28d9 !important;
+}
+html.light .hover\:text-purple-400:hover {
+  color: #5b21b6 !important;
+}
+html.light .text-orange-300,
+html.light .text-orange-400 {
+  color: #c2410c !important;
+}
+html.light .text-cyan-300,
+html.light .text-cyan-400 {
+  color: #0e7490 !important;
+}
+html.light .text-yellow-300,
+html.light .text-yellow-400,
+html.light .text-yellow-500\/80 {
+  color: #a16207 !important;
+}
+html.light .text-blue-300,
+html.light .text-blue-400 {
+  color: #1d4ed8 !important;
+}
+html.light .text-green-300,
+html.light .text-green-400 {
+  color: #15803d !important;
+}
+html.light .text-red-300,
+html.light .text-red-400 {
+  color: #b91c1c !important;
+}
+html.light .text-teal-300,
+html.light .text-teal-400 {
+  color: #0f766e !important;
+}
+html.light .text-violet-300,
+html.light .text-violet-400 {
+  color: #6d28d9 !important;
+}
+
+/* Surfaces — cards white; chips/nested fills use slate tint for definition */
+html.light .bg-white\/3 {
+  background-color: #ffffff !important;
+}
+html.light .bg-white\/5 {
+  background-color: #e2e8f0 !important;
+}
+html.light .bg-white\/10 {
+  background-color: #f1f5f9 !important;
+}
+html.light .border-white\/5,
+html.light .border-white\/8,
+html.light .border-white\/10,
+html.light .border-white\/15,
+html.light .border-white\/20 {
+  border-color: rgba(15, 23, 42, 0.14) !important;
+}
+
+html.light .hover\:text-white:hover {
+  color: #0f172a !important;
+}
+html.light .hover\:bg-white\/5:hover,
+html.light .hover\:bg-white\/10:hover {
+  background-color: rgba(15, 23, 42, 0.06) !important;
+}
+html.light .hover\:border-white\/25:hover {
+  border-color: rgba(15, 23, 42, 0.28) !important;
+}
+
+html.light .bg-\[\#0d0d1f\]\/80,
+html.light .bg-\[\#0d0d1f\]\/95,
+html.light .bg-\[\#12122a\]\/80,
+html.light .nav-scrolled,
+html.light .nav-mobile {
+  background-color: rgba(255, 255, 255, 0.94) !important;
+  border-color: rgba(15, 23, 42, 0.1) !important;
+}
+
+html.light .starfield-canvas {
+  opacity: 0.12 !important;
+}
+
+html.light .rounded-xl.bg-white,
+html.light .rounded-2xl.bg-white {
+  background-color: #ffffff !important;
+  box-shadow: inset 0 0 0 1px rgba(15, 23, 42, 0.08);
+}
+
+/* Skill / badge tint chips — readable text + tinted fills */
+html.light .bg-orange-500\/10,
+html.light .bg-orange-500\/15,
+html.light .bg-orange-500\/20 {
+  background-color: #ffedd5 !important;
+}
+html.light .border-orange-500\/30 {
+  border-color: #fdba74 !important;
+}
+
+html.light .bg-purple-500\/5,
+html.light .bg-purple-500\/10,
+html.light .bg-purple-500\/15,
+html.light .bg-purple-500\/20 {
+  background-color: #ede9fe !important;
+}
+html.light .border-purple-500\/30,
+html.light .border-purple-500\/40,
+html.light .hover\:border-purple-500\/30:hover,
+html.light .hover\:border-purple-500\/40:hover,
+html.light .hover\:border-purple-500\/50:hover {
+  border-color: #c4b5fd !important;
+}
+
+html.light .bg-cyan-500\/15,
+html.light .bg-cyan-500\/20 {
+  background-color: #cffafe !important;
+}
+html.light .border-cyan-500\/30 {
+  border-color: #67e8f8 !important;
+}
+
+html.light .bg-yellow-500\/5,
+html.light .bg-yellow-500\/15,
+html.light .bg-yellow-500\/20 {
+  background-color: #fef9c3 !important;
+}
+html.light .border-yellow-500\/15,
+html.light .border-yellow-500\/30 {
+  border-color: #fde047 !important;
+}
+
+html.light .bg-blue-500\/15,
+html.light .bg-blue-500\/20 {
+  background-color: #dbeafe !important;
+}
+html.light .border-blue-500\/30 {
+  border-color: #93c5fd !important;
+}
+
+html.light .bg-green-500\/10,
+html.light .bg-green-500\/15,
+html.light .bg-green-500\/20 {
+  background-color: #dcfce7 !important;
+}
+html.light .border-green-500\/30 {
+  border-color: #86efac !important;
+}
+
+html.light .bg-red-500\/15,
+html.light .bg-red-500\/20 {
+  background-color: #fee2e2 !important;
+}
+html.light .border-red-500\/30 {
+  border-color: #fca5a5 !important;
+}
+
+html.light .bg-teal-500\/15,
+html.light .bg-teal-500\/20 {
+  background-color: #ccfbf1 !important;
+}
+html.light .border-teal-500\/30 {
+  border-color: #5eead4 !important;
+}
+
+html.light .bg-violet-500\/15,
+html.light .bg-violet-500\/20 {
+  background-color: #ede9fe !important;
+}
+html.light .border-violet-500\/30 {
+  border-color: #c4b5fd !important;
+}
+
+/* Keep solid purple CTAs readable (white text on purple) */
+html.light .\!text-white,
+html.light .bg-purple-600,
+html.light .bg-purple-600.text-white,
+html.light a.bg-purple-600,
+html.light button.bg-purple-600,
+html.light .hover\:bg-purple-500:hover {
+  color: #ffffff !important;
+}
+
+html.light ::selection {
+  background-color: rgba(109, 40, 217, 0.22);
+}
+
+html.light ::-webkit-scrollbar-thumb {
+  background: rgba(109, 40, 217, 0.4);
+}
+
+/* Skills count pill — same look on every card, both themes */
+.skill-count {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  font-size: 0.75rem;
+  line-height: 1rem;
+  font-weight: 500;
+  padding: 0.125rem 0.5rem;
+  border-radius: 9999px;
+  color: #94a3b8;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background-color: rgba(255, 255, 255, 0.04);
+  white-space: nowrap;
+}
+html.light .skill-count {
+  color: #475569 !important;
+  border-color: rgba(15, 23, 42, 0.18) !important;
+  background-color: #f1f5f9 !important;
+}
+
+::selection {
+  background-color: rgba(139, 92, 246, 0.3);
+}
+
+::-webkit-scrollbar {
+  width: 5px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(139, 92, 246, 0.4);
+  border-radius: 9999px;
 }

@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 340">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#071018"/>
+      <stop offset="55%" style="stop-color:#0c2438"/>
+      <stop offset="100%" style="stop-color:#0a3048"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="50%" cy="42%">
+      <stop offset="0%" style="stop-color:#00ADD8;stop-opacity:0.32"/>
+      <stop offset="100%" style="stop-color:#00ADD8;stop-opacity:0"/>
+    </radialGradient>
+    <linearGradient id="helix" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#38bdf8"/>
+      <stop offset="100%" style="stop-color:#00ADD8"/>
+    </linearGradient>
+  </defs>
+  <rect width="600" height="340" fill="url(#bg)"/>
+  <rect width="600" height="340" fill="url(#glow)"/>
+
+  <g opacity="0.06" stroke="#38bdf8" stroke-width="0.5">
+    <line x1="0" y1="85" x2="600" y2="85"/>
+    <line x1="0" y1="170" x2="600" y2="170"/>
+    <line x1="0" y1="255" x2="600" y2="255"/>
+    <line x1="150" y1="0" x2="150" y2="340"/>
+    <line x1="300" y1="0" x2="300" y2="340"/>
+    <line x1="450" y1="0" x2="450" y2="340"/>
+  </g>
+
+  <path d="M 88 72 Q 118 92 88 112 Q 58 132 88 152 Q 118 172 88 192" fill="none" stroke="url(#helix)" stroke-width="2" opacity="0.35"/>
+  <path d="M 108 72 Q 138 92 108 112 Q 78 132 108 152 Q 138 172 108 192" fill="none" stroke="url(#helix)" stroke-width="2" opacity="0.22"/>
+
+  <rect x="52" y="118" width="56" height="36" rx="8" fill="#00ADD8" fill-opacity="0.08" stroke="#38bdf8" stroke-width="1.2" stroke-opacity="0.55"/>
+  <text x="80" y="140" text-anchor="middle" fill="#7dd3fc" font-size="9" font-family="monospace">CLIENT</text>
+
+  <polygon points="300,88 328,104 328,136 300,152 272,136 272,104" fill="#00ADD8" fill-opacity="0.12" stroke="#00ADD8" stroke-width="1.8" stroke-opacity="0.75"/>
+  <text x="300" y="124" text-anchor="middle" fill="#e0f2fe" font-size="11" font-weight="bold" font-family="monospace">GW</text>
+
+  <circle cx="430" cy="98" r="18" fill="#412991" fill-opacity="0.25" stroke="#818cf8" stroke-width="1.2" stroke-opacity="0.6"/>
+  <text x="430" y="102" text-anchor="middle" fill="#c7d2fe" font-size="8" font-family="monospace">OAI</text>
+  <circle cx="470" cy="138" r="16" fill="#065f46" fill-opacity="0.2" stroke="#34d399" stroke-width="1.2" stroke-opacity="0.55"/>
+  <text x="470" y="142" text-anchor="middle" fill="#6ee7b7" font-size="8" font-family="monospace">LLM</text>
+  <circle cx="430" cy="178" r="16" fill="#1e3a5f" fill-opacity="0.25" stroke="#60a5fa" stroke-width="1.2" stroke-opacity="0.55"/>
+  <text x="430" y="182" text-anchor="middle" fill="#93c5fd" font-size="8" font-family="monospace">LOC</text>
+
+  <line x1="108" y1="136" x2="272" y2="120" stroke="#38bdf8" stroke-width="1.2" opacity="0.45"/>
+  <line x1="328" y1="112" x2="412" y2="98" stroke="#38bdf8" stroke-width="1" opacity="0.35"/>
+  <line x1="328" y1="120" x2="454" y2="138" stroke="#38bdf8" stroke-width="1" opacity="0.35"/>
+  <line x1="328" y1="128" x2="414" y2="178" stroke="#38bdf8" stroke-width="1" opacity="0.35"/>
+
+  <rect x="168" y="168" width="72" height="28" rx="6" fill="#3ECF8E" fill-opacity="0.08" stroke="#3ECF8E" stroke-width="1" stroke-opacity="0.45"/>
+  <text x="204" y="186" text-anchor="middle" fill="#6ee7b7" font-size="8" font-family="monospace">pgvector</text>
+  <rect x="248" y="168" width="56" height="28" rx="6" fill="#DC382D" fill-opacity="0.08" stroke="#DC382D" stroke-width="1" stroke-opacity="0.4"/>
+  <text x="276" y="186" text-anchor="middle" fill="#fca5a5" font-size="8" font-family="monospace">Redis</text>
+  <rect x="312" y="168" width="72" height="28" rx="6" fill="#E6522C" fill-opacity="0.08" stroke="#E6522C" stroke-width="1" stroke-opacity="0.4"/>
+  <text x="348" y="186" text-anchor="middle" fill="#fdba74" font-size="8" font-family="monospace">Prometheus</text>
+
+  <text x="520" y="108" fill="#67e8f9" font-size="10" font-family="monospace" opacity="0.75">JWT auth</text>
+  <text x="520" y="124" fill="#67e8f9" font-size="10" font-family="monospace" opacity="0.75">SSE stream</text>
+  <text x="520" y="140" fill="#67e8f9" font-size="10" font-family="monospace" opacity="0.75">circuit brk</text>
+  <text x="520" y="156" fill="#67e8f9" font-size="10" font-family="monospace" opacity="0.75">rate limit</text>
+
+  <rect x="168" y="58" width="264" height="22" rx="11" fill="#00ADD8" fill-opacity="0.1" stroke="#00ADD8" stroke-width="1" stroke-opacity="0.35"/>
+  <text x="300" y="73" text-anchor="middle" fill="#7dd3fc" font-size="10" font-family="monospace" letter-spacing="1">99.97% SEMANTIC CACHE HIT &#183; 0% ERROR @ 100 VUs</text>
+
+  <text x="300" y="228" text-anchor="middle" fill="white" font-size="34" font-weight="800" font-family="Arial, sans-serif">Helix</text>
+  <text x="300" y="252" text-anchor="middle" fill="#38bdf8" font-size="11" font-family="monospace" letter-spacing="2" opacity="0.85">PRODUCTION AI INFERENCE GATEWAY</text>
+  <rect x="155" y="266" width="290" height="26" rx="6" fill="#00ADD8" fill-opacity="0.1" stroke="#00ADD8" stroke-width="1" stroke-opacity="0.35"/>
+  <text x="300" y="283" text-anchor="middle" fill="#bae6fd" font-size="10" font-family="monospace">Go &#183; Redis &#183; Supabase &#183; pgvector &#183; Fly.io</text>
+  <rect x="210" y="300" width="180" height="22" rx="5" fill="#00ADD8" fill-opacity="0.06" stroke="#38bdf8" stroke-width="1" stroke-opacity="0.25"/>
+  <text x="300" y="315" text-anchor="middle" fill="#7dd3fc" font-size="9" font-family="monospace">Auth &#8594; Cache &#8594; Route &#8594; Stream &#8594; Metrics</text>
+</svg>

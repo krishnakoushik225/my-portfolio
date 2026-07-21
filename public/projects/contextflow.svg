@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 340">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0d1f3c"/>
+      <stop offset="100%" style="stop-color:#1a3a5c"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="60%" cy="50%">
+      <stop offset="0%" style="stop-color:#3b82f6;stop-opacity:0.35"/>
+      <stop offset="100%" style="stop-color:#3b82f6;stop-opacity:0"/>
+    </radialGradient>
+  </defs>
+  <rect width="600" height="340" fill="url(#bg)"/>
+  <rect width="600" height="340" fill="url(#glow)"/>
+  <!-- Shield icon -->
+  <path d="M400 80 L440 100 L440 145 Q440 175 400 190 Q360 175 360 145 L360 100 Z" fill="none" stroke="#3b82f6" stroke-width="2" opacity="0.6"/>
+  <circle cx="400" cy="140" r="18" fill="#3b82f6" opacity="0.15" stroke="#3b82f6" stroke-width="1.5"/>
+  <text x="400" y="146" text-anchor="middle" fill="#93c5fd" font-size="16" font-weight="bold" font-family="monospace">AI</text>
+  <!-- Labels -->
+  <text x="180" y="110" fill="#60a5fa" font-size="11" font-family="monospace" opacity="0.8">DOM-aware</text>
+  <text x="180" y="126" fill="#60a5fa" font-size="11" font-family="monospace" opacity="0.8">context extraction</text>
+  <text x="430" y="230" fill="#60a5fa" font-size="11" font-family="monospace" opacity="0.8">Privacy-First</text>
+  <text x="430" y="246" fill="#60a5fa" font-size="11" font-family="monospace" opacity="0.8">Local Inference</text>
+  <text x="180" y="230" fill="#60a5fa" font-size="11" font-family="monospace" opacity="0.8">Ollama (Llama 3)</text>
+  <text x="300" y="200" text-anchor="middle" fill="white" font-size="28" font-weight="800" font-family="Arial, sans-serif">ContextFlow<tspan fill="#3b82f6">J</tspan>AI</text>
+  <text x="300" y="225" text-anchor="middle" fill="#93c5fd" font-size="11" font-family="monospace" opacity="0.7">100% LOCAL · ZERO EXTERNAL CALLS</text>
+</svg>

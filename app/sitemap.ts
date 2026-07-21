@@ -1,7 +1,4 @@
-import { MetadataRoute } from "next";
-
-// Next.js App Router auto-generates /sitemap.xml from this file.
-// Update the `url` base once you have a custom domain.
+import type { MetadataRoute } from "next";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   return [

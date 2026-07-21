@@ -1,1028 +1,1006 @@
 "use client";
 
-import { SiReact } from "react-icons/si";
-import { FaCloud, FaShieldAlt } from "react-icons/fa";
-import { BsCodeSlash, BsCpu, BsServer, BsTools } from "react-icons/bs";
-import React, { useEffect, useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { useState } from "react";
+import { motion } from "framer-motion";
 import {
-  Github, Linkedin, Mail, ExternalLink, ArrowRight, Download,
-  Briefcase, GraduationCap, ChevronUp, Menu, X, Globe, MapPin, Zap, BookOpen,
+  Github,
+  Linkedin,
+  Mail,
+  MapPin,
+  Phone,
+  ExternalLink,
+  ArrowRight,
+  Download,
+  BookOpen,
+  Briefcase,
+  Code2,
+  Server,
+  Brain,
+  Cloud,
+  Database,
+  Cpu,
+  Activity,
+  Boxes,
+  Users,
 } from "lucide-react";
-import ThemeToggle from "@/components/theme-toggle";
-import Starfield from "@/components/starfields";
 
-const featuredProjects = [
+const fadeUp = {
+  hidden: { opacity: 0, y: 20 },
+  show: (i = 0) => ({
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.5, delay: (i as number) * 0.08 },
+  }),
+};
+
+// ─── SKILLS (aligned to resume Technical Skills headings) ────────────────────
+
+const skillDomains = [
+  {
+    id: "languages",
+    label: "PROGRAMMING LANGUAGES",
+    tabLabel: "Languages",
+    border: "#f97316",
+    icon: <Code2 size={15} />,
+    iconCls: "bg-orange-500/15 text-orange-400",
+    labelCls: "text-orange-400",
+    coreCls: "bg-orange-500/20 text-orange-300 border border-orange-500/30",
+    alsoCls: "bg-white/5 text-slate-400 border border-white/8",
+    core: ["Python", "SQL", "Java", "Go", "C++", "CUDA"],
+    also: ["Bash"],
+  },
+  {
+    id: "ai",
+    label: "AI / ML & GENERATIVE AI",
+    tabLabel: "AI / ML & GenAI",
+    border: "#8b5cf6",
+    icon: <Brain size={15} />,
+    iconCls: "bg-purple-500/15 text-purple-400",
+    labelCls: "text-purple-400",
+    coreCls: "bg-purple-500/20 text-purple-300 border border-purple-500/30",
+    alsoCls: "bg-white/5 text-slate-400 border border-white/8",
+    core: [
+      "PyTorch",
+      "Hugging Face Transformers",
+      "Foundation Models",
+      "MoE",
+      "RLHF / DPO / SFT",
+      "RAG",
+      "LangGraph",
+      "AI Agents / Agentic AI",
+    ],
+    also: [
+      "TensorFlow",
+      "Scikit-learn",
+      "LangChain",
+      "LlamaIndex",
+      "MCP",
+      "Multi-Agent Systems",
+      "Tool / Function Calling",
+      "OpenCV / YOLO",
+      "XGBoost",
+      "LoRA / PEFT",
+      "Prompt Engineering",
+      "Knowledge Distillation",
+    ],
+  },
+  {
+    id: "training",
+    label: "DISTRIBUTED TRAINING & SERVING",
+    tabLabel: "Training & Serving",
+    border: "#06b6d4",
+    icon: <Cpu size={15} />,
+    iconCls: "bg-cyan-500/15 text-cyan-400",
+    labelCls: "text-cyan-400",
+    coreCls: "bg-cyan-500/20 text-cyan-300 border border-cyan-500/30",
+    alsoCls: "bg-white/5 text-slate-400 border border-white/8",
+    core: ["FSDP", "DeepSpeed", "Megatron-LM", "vLLM", "TensorRT-LLM"],
+    also: [
+      "PyTorch Distributed",
+      "Ray",
+      "NCCL",
+      "Model Quantization",
+      "Tensor / Pipeline / Data Parallelism",
+      "GPU Optimization",
+      "Distributed Inference",
+      "HPC",
+    ],
+  },
+  {
+    id: "data",
+    label: "DATA ENGINEERING & BIG DATA",
+    tabLabel: "Data Engineering",
+    border: "#eab308",
+    icon: <Database size={15} />,
+    iconCls: "bg-yellow-500/15 text-yellow-400",
+    labelCls: "text-yellow-400",
+    coreCls: "bg-yellow-500/20 text-yellow-300 border border-yellow-500/30",
+    alsoCls: "bg-white/5 text-slate-400 border border-white/8",
+    core: ["Apache Spark", "Databricks", "Apache Airflow", "Apache Kafka", "ETL Pipelines"],
+    also: [
+      "Feature Engineering",
+      "Data Validation / Quality",
+      "Synthetic Data Generation",
+      "Streaming Data Pipelines",
+      "IoT Data Processing",
+      "Apache Iceberg / Parquet / Delta Lake",
+    ],
+  },
+  {
+    id: "cloud",
+    label: "CLOUD PLATFORMS & INFRASTRUCTURE",
+    tabLabel: "Cloud & Infra",
+    border: "#3b82f6",
+    icon: <Cloud size={15} />,
+    iconCls: "bg-blue-500/15 text-blue-400",
+    labelCls: "text-blue-400",
+    coreCls: "bg-blue-500/20 text-blue-300 border border-blue-500/30",
+    alsoCls: "bg-white/5 text-slate-400 border border-white/8",
+    core: ["AWS", "Microsoft Azure", "GCP", "Kubernetes", "Docker"],
+    also: [
+      "SageMaker / Glue / Lambda / EKS / IoT Core",
+      "Spring Boot",
+      "REST APIs / Microservices",
+      "Service Mesh",
+      "Terraform / IaC",
+    ],
+  },
+  {
+    id: "mlops",
+    label: "MLOPS, DEVOPS, TESTING & MONITORING",
+    tabLabel: "MLOps & DevOps",
+    border: "#22c55e",
+    icon: <Server size={15} />,
+    iconCls: "bg-green-500/15 text-green-400",
+    labelCls: "text-green-400",
+    coreCls: "bg-green-500/20 text-green-300 border border-green-500/30",
+    alsoCls: "bg-white/5 text-slate-400 border border-white/8",
+    core: ["MLflow", "GitHub Actions", "ArgoCD", "CI/CD", "Model Monitoring"],
+    also: [
+      "Pytest",
+      "Prometheus",
+      "Grafana",
+      "OpenTelemetry",
+      "Experiment Tracking",
+      "Feature Stores",
+      "Model Versioning / Deployment",
+      "Kubernetes Operations",
+    ],
+  },
+  {
+    id: "eval",
+    label: "MODEL EVALUATION",
+    tabLabel: "Evaluation",
+    border: "#ef4444",
+    icon: <Activity size={15} />,
+    iconCls: "bg-red-500/15 text-red-400",
+    labelCls: "text-red-400",
+    coreCls: "bg-red-500/20 text-red-300 border border-red-500/30",
+    alsoCls: "bg-white/5 text-slate-400 border border-white/8",
+    core: ["MMLU", "GPQA", "HumanEval", "MT-Bench", "Custom Benchmarking"],
+    also: ["A/B Testing", "Explainable AI (XAI)", "LangSmith", "Performance Optimization"],
+  },
+  {
+    id: "datastores",
+    label: "DATABASES, VECTOR STORES & ANALYTICS",
+    tabLabel: "Databases & Vectors",
+    border: "#14b8a6",
+    icon: <Boxes size={15} />,
+    iconCls: "bg-teal-500/15 text-teal-400",
+    labelCls: "text-teal-400",
+    coreCls: "bg-teal-500/20 text-teal-300 border border-teal-500/30",
+    alsoCls: "bg-white/5 text-slate-400 border border-white/8",
+    core: ["PostgreSQL", "pgvector", "Pinecone", "FAISS", "Redis"],
+    also: ["MySQL", "Power BI", "Embedding Models", "Hybrid / Dense Retrieval"],
+  },
+  {
+    id: "professional",
+    label: "PROFESSIONAL SKILLS",
+    tabLabel: "Professional",
+    border: "#a855f7",
+    icon: <Users size={15} />,
+    iconCls: "bg-violet-500/15 text-violet-400",
+    labelCls: "text-violet-400",
+    coreCls: "bg-violet-500/20 text-violet-300 border border-violet-500/30",
+    alsoCls: "bg-white/5 text-slate-400 border border-white/8",
+    core: [
+      "System Design",
+      "Distributed Systems",
+      "Technical Leadership",
+      "Cross-Functional Collaboration",
+      "Project Ownership",
+    ],
+    also: [
+      "Agile Development",
+      "Mentoring",
+      "Documentation",
+      "Debugging",
+      "Analytical Thinking",
+      "Continuous Learning",
+    ],
+  },
+];
+
+const totalSkills = skillDomains.reduce((s, d) => s + d.core.length + d.also.length, 0);
+const filterTabs = ["All Domains", ...skillDomains.map((d) => d.tabLabel)];
+
+// ─── WORK ────────────────────────────────────────────────────────────────────
+
+const workCards = [
+  {
+    company: "Meta — Multimodal Foundation Models",
+    desc: "AI/ML Engineer building large-scale multimodal foundation model training, alignment, RAG, agentic platforms, and inference serving for hundreds of millions of daily requests across hyperscale GPU infrastructure.",
+    achievements: [
+      "Led distributed multimodal foundation model training with Python, PyTorch, Hugging Face Transformers, NCCL, and Megatron-LM — processing trillion-token datasets and improving reasoning/coding benchmark accuracy 18%",
+      "Optimized MoE architectures with CUDA, DeepSpeed, FSDP, and tensor/pipeline/expert parallelism — cut distributed training time 32% while maximizing GPU utilization",
+      "Shipped SFT, RLHF, reward models, and DPO alignment pipelines (+21% human eval scores); RAG with FAISS/hybrid search (+24% retrieval accuracy); and vLLM / TensorRT-LLM inference (−35% cost)",
+      "Built Spark/Ray/Airflow/Iceberg data platforms, MLflow/ArgoCD/OpenTelemetry LLMOps, and Azure OpenAI + LangGraph + Semantic Kernel agentic systems for enterprise production",
+    ],
+  },
+  {
+    company: "Accenture — Industrial AI & MLOps",
+    desc: "AI/ML Engineer delivering predictive maintenance, computer vision, digital twins, and cloud-native ML platforms for manufacturing — from petabyte-scale sensor data through real-time scoring APIs.",
+    achievements: [
+      "Built Python predictive maintenance pipelines over streaming IoT data from 15,000+ industrial assets — cutting unplanned downtime 32% and improving failure prediction accuracy 21% for 5,000+ users",
+      "Optimized real-time inference via feature engineering, model tuning, and MLflow — 38% lower prediction latency and 27% lower annual cloud inference cost",
+      "Shipped CV inspection with OpenCV/PyTorch/YOLO; Spark/Databricks/Delta Lake workflows; AWS SageMaker/Glue/Lambda/EKS platforms; and Spring Boot & FastAPI real-time inference microservices",
+    ],
+  },
+];
+
+// ─── PROJECTS ────────────────────────────────────────────────────────────────
+
+const projects = [
+  {
+    title: "Helix",
+    image: "/projects/helix.svg",
+    desc: "Production multi-provider LLM inference gateway with score-based routing, pgvector semantic caching, JWT tenant auth, Redis token-bucket rate limiting, circuit-breaker fallback, SSE streaming, and Prometheus/Grafana observability — load-tested at 0% failures, 18.43 req/s, 567 ms p95, and 99.97% cache hit rate across 3,885 requests at 100 VUs.",
+    insight: "Semantic cache writes run in a background goroutine so they add zero latency to the caller — the cost lever only works if cache population never blocks the hot path.",
+    tags: ["Go", "PostgreSQL", "pgvector", "Redis", "Docker", "Prometheus", "Grafana", "React"],
+    href: "https://github.com/krishnakoushik225/helix",
+  },
   {
     title: "Multi-Agent Code Repair",
-    description:
-      "An autonomous repair system that takes a GitHub issue URL and delivers a validated pull request — researching the codebase, planning a minimal fix, generating search-replace patches grounded in verbatim file content at a pinned commit SHA, and validating them in an isolated Docker sandbox (pytest, Ruff, Mypy). Demonstrated on real OSS issues: 1,436 tests passing, lint and type checks clean, in under 2 minutes at ~$0.35 per run.",
-    insight:
-      "Chose search/replace over unified diff because git apply breaks when hunks don't match the pinned tree — models hallucinate context lines. Grounding patches in fetched file content at a pinned commit SHA eliminated this entire class of failures.",
-    stack: ["Python", "LangGraph", "FastAPI", "Docker", "GitHub API"],
-    github: "https://github.com/krishnakoushik225/multi-agent-code-repair",
-    demo: null,
     image: "/projects/multi-agent-code-repair.svg",
-  },
-  {
-    title: "ResearchFlow AI",
-    description:
-      "Manual research across 10+ sources takes hours and loses citation trails. ResearchFlow decomposes any query into five specialised nodes (Planner → Decomposer → Search → Verifier → Synthesizer), retrieves and ranks web evidence via Tavily, and delivers a cited, self-verified answer in under 30 seconds — with a confidence-scored retry loop that re-queries when source relevance falls below threshold.",
-    insight:
-      "Chose LangGraph over a simpler LangChain chain specifically because stateful graphs allow conditional retry edges when source relevance scores fall below a confidence threshold — a linear chain would require a separate orchestration wrapper to achieve the same retry behaviour.",
-    stack: ["Python", "FastAPI", "LangGraph", "Ollama", "Tavily", "React"],
-    github: "https://github.com/krishnakoushik225/langgraph-research-agent",
-    demo: null,
-    image: "/projects/researchflow.png",
-  },
-  {
-    title: "ContextFlow AI",
-    description:
-      "Most AI browser tools send your browsing data to external APIs. ContextFlow runs entirely on-device using Ollama — 100% local inference, zero external calls, no data leaves the browser. Summarises pages, explains highlighted text, and answers context-aware questions via a Chrome Manifest V3 extension with a React popup and an injected floating panel.",
-    insight:
-      "The hardest part wasn't the LLM integration — it was building a streaming response protocol between the Chrome extension content script and the background service worker without a shared DOM, while keeping the extension fully offline-capable.",
-    stack: ["React", "TypeScript", "Chrome Extension", "Ollama", "Llama 3.2"],
-    github: "https://github.com/krishnakoushik225/contextflow-ai",
-    demo: null,
-    image: "/projects/contextflow.png",
+    desc: "Stateful issue-to-pull-request workflow — repository research, minimal-fix planning, commit-pinned patch generation, Docker-isolated validation, structured retry feedback, and human escalation. Validated on real Click issues: 1,136–1,436 tests passing, clean Ruff/Mypy, zero retries, ~2 min runtime, ~$0.35–$0.36 model cost.",
+    insight: "Unified diffs fail on pinned historical SHAs because models invent context lines — search/replace blocks fetched at base_commit_sha sidestep that entire class of apply failures.",
+    tags: ["Python", "LangGraph", "LiteLLM", "GitHub API", "tree-sitter", "Docker", "Pytest"],
+    href: "https://github.com/krishnakoushik225/multi-agent-code-repair",
   },
   {
     title: "DocuMind",
-    description:
-      "Unlike off-the-shelf PDF chat tools, DocuMind handles per-document scoped queries via Pinecone metadata filtering and always surfaces the exact passage that generated each answer — making it auditable for professional use. Includes a LlamaIndex RelevancyEvaluator for scoring retrieval quality without labeled ground truth, and explicit empty-retrieval handling that returns 'No relevant information found' rather than hallucinating.",
-    insight:
-      "Per-document query scoping via Pinecone doc_id metadata filtering was the critical architectural decision: global index search caused cross-document contamination. Scoping retrieval per document shifted user trust from 'I hope this is right' to 'I can verify this is right.'",
-    stack: ["Python", "FastAPI", "React", "Pinecone", "OpenAI", "LlamaIndex"],
-    github: "https://github.com/krishnakoushik225/DocuMind",
-    demo: null,
-    image: "/projects/documind.png",
+    image: "/projects/documind.svg",
+    desc: "Explainable enterprise RAG platform — extracts and chunks PDFs, stores document-scoped vectors in Pinecone, and serves context-grounded answers via FastAPI + React. Document/chunk metadata filtering, retrieved-source evidence, empty-retrieval handling, and LlamaIndex relevancy evaluation reduce cross-document contamination.",
+    insight: "The core design principle: every answer must be traceable to a source passage. Surfacing the exact chunk shifts user trust from 'I hope this is right' to 'I can verify this is right.'",
+    tags: ["Python", "FastAPI", "React", "Pinecone", "LangChain", "LlamaIndex", "OpenAI API"],
+    href: "https://github.com/krishnakoushik225/DocuMind",
   },
   {
-    title: "ECG-PEFT Bench",
-    description:
-      "Fine-tuning cardiac foundation models from scratch is prohibitively expensive for most clinical teams. This benchmark compared LoRA vs. Adapter strategies across Wav2Vec2, HuBERT, and ECG-FM on 9,814 ECG test segments — finding Wav2Vec2+LoRA best for balanced screening (F1: 0.589, AUC: 0.620) and HuBERT+Adapter best for high-sensitivity triage (Recall: 0.859), both with 60% fewer trainable parameters than full fine-tuning.",
-    insight:
-      "The clearest finding: prompt tuning degraded consistently on short ECG segments because it can't recover from insufficient context length — something that isn't obvious from NLP benchmarks and only surfaces in domain-transfer experiments.",
-    stack: ["Python", "PyTorch", "Transformers", "PEFT", "Medical AI"],
-    github: "https://github.com/krishnakoushik225/ecg-peft-benchmark",
-    demo: null,
-    image: "/projects/ecg-peft-benchmark.png",
+    title: "ECG-PEFT Benchmark",
+    image: "/projects/ecg-peft.svg",
+    desc: "Benchmarked LoRA vs Adapter fine-tuning across 3 cardiac foundation models on 65K+ ECG segments. Wav2Vec2+LoRA achieved best balanced performance (F1: 0.589, AUC: 0.620) with 60% fewer trainable parameters than full fine-tuning.",
+    insight: "Audio models have no token embeddings — injecting LoRA required patching enable_input_require_grads to a no-op, then using mask-aware mean pooling across downsampled sequence lengths.",
+    tags: ["PyTorch", "HuggingFace", "LoRA", "Wav2Vec2", "Medical AI"],
+    href: "https://github.com/krishnakoushik225/ecg-peft-benchmark",
+  },
+  {
+    title: "ResearchFlow AI",
+    image: "/projects/researchflow.svg",
+    desc: "ResearchFlow decomposes any query into parallel sub-tasks, retrieves and ranks web evidence, and delivers a cited, self-verified answer in under 30 seconds — using LangGraph's stateful graph to enable retry loops that a linear chain couldn't support.",
+    insight: "Chose LangGraph over a simpler LangChain chain specifically because stateful graphs allow conditional retry edges when source relevance scores fall below a confidence threshold.",
+    tags: ["Python", "LangGraph", "FastAPI", "Tavily", "React", "Ollama"],
+    href: "https://github.com/krishnakoushik225/langgraph-research-agent",
+  },
+  {
+    title: "ContextFlow AI",
+    image: "/projects/contextflow.svg",
+    desc: "ContextFlow runs entirely on-device using Ollama — 100% local inference, zero external calls, no data leaves the browser. Summarises pages, explains highlighted text, and answers context-aware questions with sub-second response times on consumer hardware.",
+    insight: "The hardest part wasn't the LLM integration — it was building a streaming response protocol between the Chrome extension content script and the background service worker without a shared DOM.",
+    tags: ["Chrome MV3", "TypeScript", "React", "Ollama", "Llama 3.2"],
+    href: "https://github.com/krishnakoushik225/contextflow-ai",
   },
   {
     title: "APSRTC Duty Management Portal",
-    description:
-      "Shift scheduling at scale has a classic concurrency problem: two managers assigning the same employee to overlapping duties. Built conflict-detection using optimistic locking at the database transaction level, preventing double-assignment races without surfacing complexity to the UI. Serves 500+ transport authority employees across duty assignment, leave approvals, and OTP-based password recovery across 5 roles with JWT/RBAC.",
-    insight:
-      "Initially handled conflicts at the application layer — which failed under concurrent load. Moving to optimistic locking at the database transaction level made the system race-condition-free regardless of how many managers were active simultaneously.",
-    stack: ["React", "Spring Boot", "PostgreSQL", "Spring Security", "Docker"],
-    github: "https://github.com/krishnakoushik225/APSRTC-Duty-Management-Portal",
-    demo: null,
-    image: "/projects/apsrtc.png",
-  },
-  {
-    title: "CycleGAN: Monet ↔ Photo Translation",
-    description:
-      "Implements CycleGAN for unpaired image-to-image translation between Monet-style paintings and photographic landscapes, with controlled ablation studies on cycle-consistency weight (λ_cyc: 5, 10, 20) and identity loss (λ_id: 0.0, 0.1). Results show λ_cyc=10 produces the most visually balanced outputs, and identity loss significantly reduces color distortion during domain transfer.",
-    insight:
-      "The ablation on cycle-consistency weight reveals a non-obvious tradeoff: lower λ_cyc gives more stylistic freedom but weaker reconstruction fidelity; higher λ_cyc enforces structural consistency but limits stylization. Understanding this directly informs PEFT bottleneck sizing decisions in generative models.",
-    stack: ["Python", "PyTorch", "CycleGAN", "Computer Vision", "Ablation Study"],
-    github: "https://github.com/krishnakoushik225/CycleGAN-Monet-Photo-Translation-Cycle-Identity-Loss-Ablations-",
-    demo: null,
-    image: "/projects/CycleGAN-Monet-Photo-Translation.png",
+    image: "/projects/apsrtc.svg",
+    desc: "Workforce management system for 500+ transport authority employees — Spring Boot REST APIs with JWT/RBAC across 5 roles, optimistic locking on shift-assignment records, duty assignment and leave approval workflows. Scheduling overhead reduced 40%.",
+    insight: "Optimistic locking prevents a subtle race condition where two admins simultaneously assign the same employee to overlapping shifts — catching the conflict at the database level rather than application level.",
+    tags: ["Spring Boot", "React", "PostgreSQL", "JWT", "Docker"],
+    href: "https://github.com/krishnakoushik225/APSRTC-Duty-Management-Portal",
   },
   {
     title: "GenDiff-PEFT",
-    description:
-      "Research investigation into parameter-efficient fine-tuning for conditional diffusion models on CIFAR-10, achieving a 17.1% FID improvement (290.19→240.48) and 85% reduction in training time (8.5h→1h) via classifier-free guidance, multi-resolution attention at 16×16, extended DDIM sampling from 50→100 steps, and AdamW with cosine annealing. The findings directly shaped PEFT strategy choices in ECG-PEFT.",
-    insight:
-      "This is exploratory research, not a production system. Its value is in the classifier-free guidance tradeoff: higher guidance → better fidelity, lower guidance → better diversity. Understanding which PEFT configurations fail and why matters as much as which ones succeed.",
-    stack: ["Python", "PyTorch", "Diffusion Models", "PEFT", "Computer Vision"],
-    github: "https://github.com/krishnakoushik225/GenDiff-PEFT-Efficient-Conditional-Diffusion-Optimization",
-    demo: null,
-    image: "/projects/GenDiff-PEFT.png",
+    image: "/projects/gendiff.svg",
+    desc: "17.1% FID improvement (290.19→240.48) with 85% reduction in training time. Enhanced conditional UNet with 16×16 multi-head self-attention, DDIM sampling extended 50→100 steps. CFG ablation: higher guidance = better fidelity, lower = better diversity.",
+    insight: "Fine-tuning outperforms training from scratch for conditional generation — the pretrained UNet already encodes useful low-level structure that would take thousands of steps to relearn.",
+    tags: ["PyTorch", "DDIM", "CFG", "CIFAR-10", "Diffusion"],
+    href: "https://github.com/krishnakoushik225/GenDiff-PEFT-Efficient-Conditional-Diffusion-Optimization",
   },
   {
-    title: "CLAP-Optimized AudioLDM",
-    description:
-      "Text-to-audio generation at inference time produces variable-quality outputs. By generating N candidates per prompt and selecting via CLAP text-audio alignment score, CLAPScore improved ~40% at n=5 with no model retraining. Includes detailed cost-quality tradeoff analysis showing clear diminishing returns beyond ~7 samples — a practical reference for teams deciding whether quality or latency is the bottleneck.",
-    insight:
-      "The tradeoff is non-linear: going from 1 to 5 candidates gives most of the quality gain (~40% CLAPScore improvement); going beyond 7 adds cost with sharply diminishing returns. The inflection point at n=5 is the finding — not the maximum achievable score.",
-    stack: ["Python", "PyTorch", "AudioLDM", "CLAP", "Multimodal AI"],
-    github: "https://github.com/krishnakoushik225/CLAP-Optimized-Text-to-Audio-Generation-AudioLDM-",
-    demo: null,
-    image: "/projects/CLAP-Guided Multi-Sample Selection for AudioLDM.png",
-  },
-];
-
-const enterpriseWork = [
-  {
-    title: "University of South Florida — Academic Planning Systems",
-    badge: "Professional Work",
-    description:
-      "Led feature development and system modernization on a 4-person engineering team, owning work end-to-end from API design through AKS deployment — shipping to 5,000+ daily users across USF's academic planning infrastructure.",
-    highlights: [
-      "Re-architected a legacy PHP monolith into Java/Spring Boot microservices using Domain-Driven Design, deployed on Azure AKS with blue/green GitHub Actions CI/CD — deployment cycle cut from 3 days to under 3 hours at 99.6% uptime",
-      "Rebuilt React frontend with Redux Toolkit, TanStack Query, and component-level code splitting — page load dropped 60%; Redis write-through caching and a composite SQL Server index on (student_id, term_id) cut API latency from 820ms to 310ms",
-      "Raised test coverage to 87% via TDD, contract testing, and SonarQube CI quality gates (JUnit 5, Mockito, Selenium E2E) — eliminated a class of regression slipping through quarterly releases",
-    ],
+    title: "CLAP Text-to-Audio Generation",
+    image: "/projects/clap-audio.svg",
+    desc: "Inference-time best-of-n selection using CLAP (text-audio alignment) scoring — ~40% CLAPScore improvement at n=5 with no training cost. Includes spectrogram comparisons and cost-benefit analysis showing clear diminishing returns beyond ~7 samples.",
+    insight: "Best-of-n selection shifts quality from 'average output' to 'peak capability of the model' — the real challenge is that CLAP scoring itself costs ~2s per candidate, so the cost-benefit curve peaks around n=5.",
+    tags: ["AudioLDM", "CLAP", "PyTorch", "Text-to-Audio", "Diffusion"],
+    href: "https://github.com/krishnakoushik225/CLAP-Optimized-Text-to-Audio-Generation-AudioLDM-",
   },
   {
-    title: "Optum (UnitedHealth Group) — Healthcare Data Pipelines",
-    badge: "Professional Work",
-    description:
-      "Built HIPAA-compliant Java/Spring Boot microservices and Kafka data pipelines processing patient health records for 200+ analysts, with a focus on reliability, observability, and PHI-safe data handling across Azure-based services.",
-    highlights: [
-      "Designed and operated Kafka event pipelines at 3,500+ events/min with exactly-once delivery semantics and Cosmos DB multi-region geo-replication — 99.6% SLA across HIPAA-adjacent patient data flows",
-      "Standardised API contracts across 12 microservices: versioned endpoints, idempotency keys, token-bucket rate limiting, and circuit breakers; composite index redesign and connection pooling on PostgreSQL + SQL Server lifted query throughput 30%",
-      "Deployed Grafana/Splunk distributed tracing and authored DRI runbooks — MTTR dropped 35%; Python automation scripts saved 12 hrs/week; rewrote a core aggregation job from O(n log n) to O(n) using a hash-map pass",
-    ],
+    title: "CycleGAN Monet Translation",
+    image: "/projects/cyclegan.svg",
+    desc: "Unpaired image-to-image translation between Monet paintings and photographs. Ablation studies on cycle-consistency (λ_cyc ∈ {5,10,20}) and identity loss. λ_cyc=10 produced the most visually balanced results with stable colour preservation.",
+    insight: "λ_cyc=10 is the sweet spot: lower values allow stylistic flexibility but weaker reconstruction fidelity; higher values over-constrain the generator and limit the range of stylization.",
+    tags: ["PyTorch", "CycleGAN", "GAN", "Ablation", "Image Translation"],
+    href: "https://github.com/krishnakoushik225/CycleGAN-Monet-Photo-Translation-Cycle-Identity-Loss-Ablations-",
   },
   {
-    title: "BNP Paribas — Financial Workflow Platforms",
-    badge: "Professional Work",
-    description:
-      "Replaced Excel-based reconciliation workflows with production Java/Spring Boot APIs and React/Angular trading dashboards across 4 trading desks on BNP Paribas's Centric platform, cutting errors 30% and saving 20 hrs/week of manual work.",
-    highlights: [
-      "Built Spring Boot REST + SOAP APIs across 4 trading desks — eliminated manual Excel reconciliation; applied OWASP Top 10 mitigations, OAuth2/JWT RBAC, and TLS mutual auth; closed all open critical CVEs with zero regressions",
-      "Tuned Oracle SQL stored procedures and JVM heap/G1GC settings — high-frequency transaction latency cut 25%; Selenium E2E coverage (80%+) and Splunk dashboards reduced UI regression detection time 40%",
-      "Optimised React/Angular trading dashboards with Redux state management and async component loading — p99 render time under 400ms at peak market hours across all four desks",
-    ],
+    title: "APSRTC Portal · .NET Edition",
+    image: "/projects/apsrtc-dotnet.svg",
+    desc: "Full-stack alternate implementation using ASP.NET Core + Entity Framework Core. JWT/HMAC-SHA256 auth, Redis-backed token blacklisting for stateless auth with revocation, rate limiting middleware, layered architecture with OpenAPI docs.",
+    insight: "Redis-backed JWT blacklisting enables stateless auth with revocation — solving the logout problem without session state by keeping a small TTL-expiring blacklist that mirrors token lifetime.",
+    tags: ["ASP.NET Core", "React", "PostgreSQL", "Redis", "Docker"],
+    href: "https://github.com/krishnakoushik225/apsrtc-portal",
   },
 ];
 
-const experience = [
+// ─── TIMELINE ────────────────────────────────────────────────────────────────
+
+const timeline = [
   {
-    role: "Full Stack Developer",
-    org: "University of South Florida",
-    period: "Sep 2024 — May 2026",
-    summary:
-      "Led full-stack feature development on a 4-person Agile/Scrum team, re-architecting a legacy PHP monolith into Java/Spring Boot microservices on Azure AKS and rebuilding the React frontend — shipping to 5,000+ daily users with 99.6% uptime across USF's academic planning infrastructure.",
-    icon: "/companies/usf.jpeg",
+    role: "AI/ML Engineer",
+    company: "Meta",
+    period: "Feb 2025 — Present",
+    location: "Menlo Park, CA",
+    logo: "/companies/meta.png",
+    desc: "Lead distributed multimodal foundation model training, MoE optimization, SFT/RLHF/DPO alignment, RAG systems, LLMOps, and high-throughput inference (vLLM, TensorRT-LLM) — collaborating with researchers and infrastructure teams to productionize models for global AI platforms.",
   },
   {
-    role: "Associate Software Engineer",
-    org: "UnitedHealth Group (Optum)",
-    period: "Jul 2023 — Aug 2024",
-    summary:
-      "Built HIPAA-compliant Java/Spring Boot microservices and Kafka data pipelines at 3,500+ events/min for 200+ healthcare analysts. Deployed Grafana/Splunk distributed tracing and authored DRI runbooks — MTTR dropped 35% and on-call handoffs became structured and repeatable.",
-    icon: "/companies/optum.png",
-  },
-  {
-    role: "Software Engineer",
-    org: "BNP Paribas",
-    period: "Jun 2022 — Jul 2023",
-    summary:
-      "Replaced Excel-based trading desk reconciliation with Java/Spring Boot REST + SOAP APIs across 4 desks on BNP Paribas's Centric platform, cutting errors 30% and saving 20 hrs/week. Applied OWASP Top 10, OAuth2/JWT RBAC, and TLS mutual auth — closed all open critical CVEs with zero regressions.",
-    icon: "/companies/bnpparibas.png",
+    role: "AI/ML Engineer",
+    company: "Accenture",
+    period: "Mar 2021 — Jun 2024",
+    location: "India",
+    logo: "/companies/accenture.png",
+    desc: "Built industrial AI spanning predictive maintenance on 15,000+ IoT assets, computer vision inspection (YOLO), digital twins, Spark/Databricks/Delta Lake platforms, and AWS SageMaker MLOps — delivering real-time inference APIs with Java/Spring Boot and FastAPI.",
   },
 ];
 
 const education = [
   {
-    degree: "M.S. in Computer Science and Engineering",
+    degree: "Master of Science in Computer Science & Engineering",
     school: "University of South Florida",
-    period: "Aug 2024 — May 2026",
-    details: "GPA: 3.89/4.0 • Graduated May 2026 • Tampa, Florida",
-    icon: "/companies/usf.jpeg",
-  },
-  {
-    degree: "B.Tech. in Computer Science and Engineering",
-    school: "Amrita Vishwa Vidyapeetham",
-    period: "2019 — 2023",
-    details: "GPA: 8.31/10 • Coimbatore, India",
-    icon: "/companies/amrita.png",
+    logo: "/companies/usf.png",
   },
 ];
 
-const lookingFor = [
+const certifications = [
   {
-    icon: <Briefcase className="h-5 w-5" />,
-    label: "Target Roles",
-    items: ["Software Engineer", "AI / ML Engineer", "Full-Stack Engineer"],
+    name: "AWS Certified Machine Learning Engineer – Associate (MLA-C01)",
+    logo: "/companies/aws.jpg",
+    alt: "AWS",
   },
   {
-    icon: <Zap className="h-5 w-5" />,
-    label: "Industries",
-    items: ["Fintech & Payments", "AI / Cloud Platforms", "Developer Tooling"],
+    name: "AWS Certified AI Practitioner",
+    logo: "/companies/aws.jpg",
+    alt: "AWS",
   },
   {
-    icon: <MapPin className="h-5 w-5" />,
-    label: "Location",
-    items: ["Open to relocation (US-wide)", "Remote-friendly preferred", "Available Now"],
+    name: "Microsoft Certified: Azure AI Engineer Associate",
+    logo: "/companies/microsoft.png",
+    alt: "Microsoft",
+  },
+  {
+    name: "Databricks Certified Machine Learning Professional",
+    logo: "/companies/databricks.png",
+    alt: "Databricks",
   },
 ];
 
-// ─── SKILLS DATA ───────────────────────────────────────────────────────────────
-
-const DOMAIN_THEMES: Record<string, {
-  accent: string; accentRgb: string; label: string;
-  text: string; bg: string; border: string;
-  pillBg: string; pillText: string; icon: React.ReactNode;
-}> = {
-  Languages: {
-    accent: "#D97706", accentRgb: "217,119,6", label: "Languages",
-    text: "text-amber-600 dark:text-amber-400",
-    bg: "bg-amber-50 dark:bg-amber-400/8",
-    border: "border-amber-300 dark:border-amber-400/25",
-    pillBg: "bg-amber-50 border-amber-300 dark:bg-amber-400/10 dark:border-amber-400/20",
-    pillText: "text-amber-700 dark:text-amber-300",
-    icon: <BsCodeSlash className="h-4 w-4" />,
-  },
-  Frontend: {
-    accent: "#0284C7", accentRgb: "2,132,199", label: "Frontend",
-    text: "text-sky-600 dark:text-sky-400",
-    bg: "bg-sky-50 dark:bg-sky-400/8",
-    border: "border-sky-300 dark:border-sky-400/25",
-    pillBg: "bg-sky-50 border-sky-300 dark:bg-sky-400/10 dark:border-sky-400/20",
-    pillText: "text-sky-700 dark:text-sky-300",
-    icon: <SiReact className="h-4 w-4" />,
-  },
-  Backend: {
-    accent: "#059669", accentRgb: "5,150,105", label: "Backend & APIs",
-    text: "text-emerald-600 dark:text-emerald-400",
-    bg: "bg-emerald-50 dark:bg-emerald-400/8",
-    border: "border-emerald-300 dark:border-emerald-400/25",
-    pillBg: "bg-emerald-50 border-emerald-300 dark:bg-emerald-400/10 dark:border-emerald-400/20",
-    pillText: "text-emerald-700 dark:text-emerald-300",
-    icon: <BsServer className="h-4 w-4" />,
-  },
-  AI: {
-    accent: "#7C3AED", accentRgb: "124,58,237", label: "AI & LLM",
-    text: "text-violet-600 dark:text-violet-400",
-    bg: "bg-violet-50 dark:bg-violet-400/8",
-    border: "border-violet-300 dark:border-violet-400/25",
-    pillBg: "bg-violet-50 border-violet-300 dark:bg-violet-400/10 dark:border-violet-400/20",
-    pillText: "text-violet-700 dark:text-violet-300",
-    icon: <BsCpu className="h-4 w-4" />,
-  },
-  Cloud: {
-    accent: "#1D4ED8", accentRgb: "29,78,216", label: "Cloud & DevOps",
-    text: "text-blue-600 dark:text-blue-400",
-    bg: "bg-blue-50 dark:bg-blue-400/8",
-    border: "border-blue-300 dark:border-blue-400/25",
-    pillBg: "bg-blue-50 border-blue-300 dark:bg-blue-400/10 dark:border-blue-400/20",
-    pillText: "text-blue-700 dark:text-blue-300",
-    icon: <FaCloud className="h-4 w-4" />,
-  },
-  Security: {
-    accent: "#DC2626", accentRgb: "220,38,38", label: "Security",
-    text: "text-red-600 dark:text-red-400",
-    bg: "bg-red-50 dark:bg-red-400/8",
-    border: "border-red-300 dark:border-red-400/25",
-    pillBg: "bg-red-50 border-red-300 dark:bg-red-400/10 dark:border-red-400/20",
-    pillText: "text-red-700 dark:text-red-300",
-    icon: <FaShieldAlt className="h-4 w-4" />,
-  },
-  Tools: {
-    accent: "#475569", accentRgb: "71,85,105", label: "Tools & Workflow",
-    text: "text-slate-600 dark:text-slate-400",
-    bg: "bg-slate-100 dark:bg-slate-400/8",
-    border: "border-slate-300 dark:border-slate-400/25",
-    pillBg: "bg-slate-100 border-slate-300 dark:bg-slate-400/10 dark:border-slate-400/20",
-    pillText: "text-slate-700 dark:text-slate-300",
-    icon: <BsTools className="h-4 w-4" />,
-  },
-};
-
-const SKILL_DOMAINS = [
-  {
-    id: "Languages",
-    primary: ["Python", "TypeScript", "Java", "C++", "C#", "JavaScript"],
-    skills: ["Java", "C++", "C", "C#", "Python", "JavaScript", "TypeScript", "Haskell", "Scala", "VB Script"],
-  },
-  {
-    id: "Frontend",
-    primary: ["React", "TypeScript", "Next.js", "Tailwind CSS", "Angular", "Redux Toolkit"],
-    skills: ["React", "Angular", "TypeScript", "Redux Toolkit", "TanStack Query", "Bootstrap", "Tailwind CSS", "Vite", "HTML5", "CSS3"],
-  },
-  {
-    id: "Backend",
-    primary: ["Spring Boot", "ASP.NET Core", "FastAPI", "Spring Security", "JPA / Hibernate"],
-    skills: [
-      "ASP.NET Core", "ASP.NET MVC", "Entity Framework Core", "LINQ", "Razor Pages",
-      "ASP.NET Identity", "xUnit", "NUnit", "Moq",
-      "Spring Boot", "Spring MVC", "Spring Security", "Spring Data JPA", "Hibernate",
-      "Maven", "Gradle", "JUnit 5",
-      "FastAPI", "Django", "Celery", "SQLAlchemy", "PyTest", "PyPDF2",
-      "PostgreSQL", "SQL Server", "Redis", "Cosmos DB", "Pinecone",
-    ],
-  },
-  {
-    id: "AI",
-    primary: ["LangGraph", "PyTorch", "RAG Pipelines", "OpenAI GPT-4", "HuggingFace"],
-    skills: [
-      "LangGraph", "OpenAI GPT-4 API", "Pinecone", "LlamaIndex", "HuggingFace",
-      "Ollama", "Llama 3.2", "PyTorch", "PEFT", "LoRA",
-      "RAG Pipelines", "Prompt Engineering", "Tool Calling",
-      "GitHub Copilot", "Claude Code",
-    ],
-  },
-  {
-    id: "Cloud",
-    primary: ["Azure AKS", "Docker", "Kubernetes", "GitHub Actions", "AWS Lambda"],
-    skills: [
-      "Azure AKS", "Azure Functions", "Azure Cosmos DB", "Azure Key Vault",
-      "Azure App Insights", "Azure Service Bus", "Azure DevOps",
-      "AWS EC2", "AWS S3", "AWS Lambda", "AWS ECS", "Amazon SQS",
-      "Docker", "Kubernetes", "GitHub Actions", "ARM Templates", "Bicep", "CI/CD",
-    ],
-  },
-  {
-    id: "Security",
-    primary: ["JWT", "OAuth 2.0", "RBAC", "Spring Security", "Azure Key Vault"],
-    skills: [
-      "JWT", "OAuth 2.0", "RBAC", "Azure Key Vault",
-      "Spring Security", "ASP.NET Identity", "Input Validation", "Audit Logging",
-    ],
-  },
-  {
-    id: "Tools",
-    primary: ["Git", "GitHub", "VS Code", "IntelliJ IDEA", "Postman"],
-    skills: [
-      "Git", "GitHub", "VS Code", "IntelliJ IDEA", "Postman",
-      "PowerShell", "Bash", "Linux", "Figma", "Jira",
-      "Confluence", "npm", "Webpack",
-    ],
-  },
+const companyLogos = [
+  { src: "/companies/meta.png", alt: "Meta" },
+  { src: "/companies/accenture.png", alt: "Accenture" },
 ];
 
-const ALL_TABS = ["All", "Languages", "Frontend", "Backend", "AI", "Cloud", "Security", "Tools"] as const;
-type Tab = (typeof ALL_TABS)[number];
+// ─── PAGE ─────────────────────────────────────────────────────────────────────
 
-const NAV_LINKS = [
-  { href: "#home", label: "Home" },
-  { href: "#about", label: "About" },
-  { href: "#skills", label: "Skills" },
-  { href: "#work", label: "Work" },
-  { href: "#projects", label: "Projects" },
-  { href: "#experience", label: "Experience" },
-  { href: "#contact", label: "Contact" },
-];
+export default function Home() {
+  const [activeFilter, setActiveFilter] = useState("All Domains");
 
-const fadeUp = {
-  hidden: { opacity: 0, y: 28 },
-  visible: (i: number = 0) => ({
-    opacity: 1, y: 0,
-    transition: { duration: 0.75, delay: i * 0.07, ease: "easeOut" as const },
-  }),
-};
+  const visibleDomains =
+    activeFilter === "All Domains"
+      ? skillDomains
+      : skillDomains.filter((d) => d.tabLabel === activeFilter);
 
-function ProgressBar() {
-  const [pct, setPct] = useState(0);
-  useEffect(() => {
-    const update = () => {
-      const scrolled = window.scrollY;
-      const total = document.documentElement.scrollHeight - window.innerHeight;
-      setPct(total > 0 ? (scrolled / total) * 100 : 0);
-    };
-    window.addEventListener("scroll", update, { passive: true });
-    return () => window.removeEventListener("scroll", update);
-  }, []);
   return (
-    <div className="pointer-events-none fixed left-0 top-0 z-[200] h-[2px] transition-none"
-      style={{ width: `${pct}%`, background: "linear-gradient(90deg, #7C3AED, #9D4EDD)" }} />
-  );
-}
+    <main className="relative min-h-screen text-slate-100">
 
-function BackToTop() {
-  const [visible, setVisible] = useState(false);
-  useEffect(() => {
-    const onScroll = () => setVisible(window.scrollY > 600);
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
-  return (
-    <AnimatePresence>
-      {visible && (
-        <motion.button
-          initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: 10 }} transition={{ duration: 0.2 }}
-          onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-          className="fixed bottom-8 right-8 z-50 flex h-10 w-10 items-center justify-center rounded-full border border-black/10 bg-white/80 text-slate-700 shadow-xl backdrop-blur-xl transition hover:border-[#9D4EDD]/40 hover:bg-[#9D4EDD] hover:text-white dark:border-white/10 dark:bg-[#0b1020]/80 dark:text-white/70 dark:hover:bg-[#9D4EDD] dark:hover:text-white"
-          aria-label="Back to top">
-          <ChevronUp className="h-4 w-4" />
-        </motion.button>
-      )}
-    </AnimatePresence>
-  );
-}
+      {/* ── HERO ─────────────────────────────────────────────────────────── */}
+      <section
+        id="home"
+        className="relative z-10 min-h-screen flex items-center max-w-7xl mx-auto px-6 pt-16"
+      >
+        <div className="w-full grid lg:grid-cols-2 gap-12 items-stretch py-16">
 
-function MobileMenu({ open, onClose, activeSection }: {
-  open: boolean; onClose: () => void; activeSection: string;
-}) {
-  return (
-    <AnimatePresence>
-      {open && (
-        <>
-          <motion.div
-            initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-            transition={{ duration: 0.2 }} onClick={onClose}
-            className="fixed inset-0 z-[90] bg-black/60 backdrop-blur-sm lg:hidden" />
-          <motion.div
-            initial={{ x: "100%" }} animate={{ x: 0 }} exit={{ x: "100%" }}
-            transition={{ duration: 0.3, ease: "easeOut" }}
-            className="fixed right-0 top-0 z-[95] flex h-full w-72 flex-col border-l border-white/10 bg-[#0b1020]/95 p-8 backdrop-blur-2xl lg:hidden">
-            <div className="mb-10 flex items-center justify-between">
-              <span className="text-lg font-bold text-white">
-                Krishna's <span className="text-[#9D4EDD]">Portfolio</span>
+          {/* Left */}
+          <div className="text-left flex flex-col">
+            <motion.p
+              variants={fadeUp} initial="hidden" animate="show" custom={0}
+              className="text-slate-100 text-xl sm:text-2xl font-semibold mb-3"
+            >
+              Hi, I&apos;m Krishna Koushik{" "}
+              <span className="text-purple-400 font-bold">Unnam.</span>
+            </motion.p>
+
+            <motion.div
+              variants={fadeUp} initial="hidden" animate="show" custom={1}
+              className="flex flex-wrap items-center gap-2 mb-2"
+            >
+              <span className="inline-flex px-3 py-1 rounded-full text-[11px] font-medium border border-white/20 bg-transparent text-slate-300 uppercase tracking-[0.14em]">
+                AI/ML Engineer · Foundation Models &amp; GenAI
               </span>
-              <button onClick={onClose}
-                className="rounded-full border border-white/10 p-2 text-white/60 transition hover:border-white/20 hover:text-white"
-                aria-label="Close menu">
-                <X className="h-4 w-4" />
-              </button>
-            </div>
-            <nav className="flex flex-col gap-2">
-              {NAV_LINKS.map((link) => {
-                const id = link.href.replace("#", "");
-                const isActive = activeSection === id;
-                return (
-                  <a key={link.href} href={link.href} onClick={onClose}
-                    className={`rounded-xl px-4 py-3 text-base font-medium transition ${
-                      isActive ? "bg-[#9D4EDD]/15 text-[#9D4EDD]" : "text-white/60 hover:bg-white/5 hover:text-white"
-                    }`}>
-                    {link.label}
-                  </a>
-                );
-              })}
-            </nav>
-            <div className="mt-auto pt-8">
-              <a href="mailto:krishnakoushiku@gmail.com" onClick={onClose}
-                className="flex items-center justify-center gap-2 rounded-full bg-gradient-to-r from-[#7C3AED] to-[#9D4EDD] px-5 py-3 text-sm font-medium text-white transition hover:opacity-90">
-                <Mail className="h-4 w-4" /> Get in touch
+              <span className="inline-flex px-3 py-1 rounded-full text-[11px] font-medium border border-purple-500/40 bg-purple-500/10 text-purple-300 uppercase tracking-[0.14em]">
+                M.S. CS &amp; Engineering @ USF
+              </span>
+            </motion.div>
+
+            <motion.div
+              variants={fadeUp} initial="hidden" animate="show" custom={1.2}
+              className="mb-5"
+            >
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-medium bg-green-500/10 border border-green-500/30 text-green-400 tracking-wide">
+                <span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />
+                At Meta · Feb 2025 — Present
+              </span>
+            </motion.div>
+
+            <motion.h1
+              variants={fadeUp} initial="hidden" animate="show" custom={2}
+              className="text-[2.75rem] sm:text-5xl lg:text-[3.5rem] xl:text-[3.75rem] font-bold text-white leading-[1.08] tracking-[-0.02em] mb-6"
+            >
+              I train and ship large-scale AI systems that run in production.
+            </motion.h1>
+
+            <motion.p
+              variants={fadeUp} initial="hidden" animate="show" custom={3}
+              className="text-slate-400 text-[15px] sm:text-base font-normal leading-[1.65] mb-6 max-w-lg"
+            >
+              AI/ML Engineer with 5+ years designing, training, and deploying foundation models,
+              multimodal LLMs, RAG, RLHF, and enterprise ML — from GPU clusters to cloud inference
+              serving millions of users.
+            </motion.p>
+
+            <motion.div
+              variants={fadeUp} initial="hidden" animate="show" custom={3.5}
+              className="flex items-start gap-2.5 p-4 rounded-xl border border-white/8 bg-white/[0.03] mb-8 max-w-lg"
+            >
+              <BookOpen size={16} className="text-purple-400 shrink-0 mt-0.5" />
+              <p className="text-[13px] sm:text-sm text-slate-400 font-normal leading-relaxed">
+                <span className="text-slate-300 font-medium">Currently building: </span>
+                multimodal foundation model training, Mixture-of-Experts architectures, RLHF/DPO
+                alignment, RAG systems, and agentic AI platforms at Meta.
+              </p>
+            </motion.div>
+
+            <motion.div
+              variants={fadeUp} initial="hidden" animate="show" custom={4}
+              className="flex flex-wrap gap-3"
+            >
+              <a
+                href="#projects"
+                className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-purple-600 hover:bg-purple-500 !text-white font-medium text-sm transition-colors"
+              >
+                View Projects
+                <ArrowRight size={15} />
               </a>
+              <a
+                href="/resume.pdf"
+                download
+                className="inline-flex items-center gap-2 px-6 py-3 rounded-full border border-white/15 bg-transparent hover:bg-white/5 text-slate-300 font-medium text-sm transition-colors"
+              >
+                Resume
+                <Download size={14} />
+              </a>
+            </motion.div>
+
+            <motion.div
+              variants={fadeUp} initial="hidden" animate="show" custom={4.5}
+              className="flex items-center gap-3 mt-6"
+            >
+              {[
+                { icon: Github, href: "https://github.com/krishnau225", label: "GitHub" },
+                { icon: Linkedin, href: "https://www.linkedin.com/in/krishna-u225/", label: "LinkedIn" },
+                { icon: Mail, href: "mailto:krishnakoushikunnam1@gmail.com", label: "Email" },
+              ].map(({ icon: Icon, href, label }) => (
+                <a
+                  key={label}
+                  href={href}
+                  target={href.startsWith("mailto:") ? undefined : "_blank"}
+                  rel={href.startsWith("mailto:") ? undefined : "noopener noreferrer"}
+                  aria-label={label}
+                  className="w-10 h-10 flex items-center justify-center rounded-full border border-white/10 bg-white/5 text-slate-400 hover:text-purple-400 hover:border-purple-500/40 hover:bg-purple-500/10 transition-all"
+                >
+                  <Icon size={16} />
+                </a>
+              ))}
+            </motion.div>
+          </div>
+
+          {/* Right — Profile Card (matches left column height) */}
+          <motion.div
+            variants={fadeUp} initial="hidden" animate="show" custom={2}
+            className="hidden lg:flex h-full min-h-0"
+          >
+            <div className="w-full max-w-md ml-auto h-full flex flex-col rounded-2xl border border-white/10 bg-[#12122a]/80 backdrop-blur-sm overflow-hidden">
+              <div className="flex items-center justify-between px-5 py-3.5 shrink-0">
+                <span className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-400">
+                  Overview
+                </span>
+                <span className="px-3 py-1 rounded-full text-[10px] font-semibold uppercase tracking-wider text-slate-300 border border-white/15">
+                  AI/ML Engineer
+                </span>
+              </div>
+              <div className="flex-1 min-h-0 px-4 pb-4 flex flex-col">
+                <div className="rounded-2xl bg-white overflow-hidden flex-1 min-h-[14rem] flex items-center justify-center">
+                  <img
+                    src="/avatar.png"
+                    alt="Krishna Koushik Unnam"
+                    className="w-full h-full object-cover object-top"
+                  />
+                </div>
+              </div>
+              <div className="grid grid-cols-2 gap-2 px-4 pb-4 shrink-0">
+                <div className="rounded-xl border border-white/8 bg-white/[0.03] p-3">
+                  <p className="text-xs text-slate-500 mb-1 font-normal">Focus</p>
+                  <p className="text-sm font-medium text-white leading-snug">Foundation Models, RAG, MLOps</p>
+                </div>
+                <div className="rounded-xl border border-white/8 bg-white/[0.03] p-3">
+                  <p className="text-xs text-slate-500 mb-1 font-normal">Based in</p>
+                  <p className="text-sm font-medium text-white leading-snug">Menlo Park, CA</p>
+                </div>
+              </div>
             </div>
           </motion.div>
-        </>
-      )}
-    </AnimatePresence>
-  );
-}
-
-function SectionTitle({ eyebrow, title, description }: {
-  eyebrow: string; title: React.ReactNode; description?: string;
-}) {
-  return (
-    <div className="max-w-4xl">
-      <p className="text-[11px] uppercase tracking-[0.35em] text-black/45 dark:text-white/45">{eyebrow}</p>
-      <h2 className="mt-4 text-4xl font-semibold tracking-[-0.04em] text-slate-900 dark:text-white md:text-6xl">{title}</h2>
-      {description && <p className="mt-5 max-w-3xl text-lg leading-8 text-slate-600 dark:text-white/60">{description}</p>}
-    </div>
-  );
-}
-
-function DomainCard({ domain, index, expanded = false }: {
-  domain: (typeof SKILL_DOMAINS)[0]; index: number; expanded?: boolean;
-}) {
-  const theme = DOMAIN_THEMES[domain.id];
-  const secondary = domain.skills.filter((s) => !domain.primary.includes(s));
-  return (
-    <motion.div
-      custom={index} initial="hidden" whileInView="visible"
-      viewport={{ once: true, amount: 0.1 }} variants={fadeUp}
-      className={`group relative overflow-hidden rounded-2xl border transition-all duration-300
-        ${expanded ? "col-span-full" : ""}
-        border-slate-200 bg-white dark:border-white/8 dark:bg-white/[0.025] hover:-translate-y-0.5 hover:shadow-xl`}
-      style={{ boxShadow: `0 0 0 1px rgba(${theme.accentRgb}, 0.12)` }}
-      onMouseEnter={(e) => {
-        (e.currentTarget as HTMLElement).style.boxShadow =
-          `0 0 0 1px rgba(${theme.accentRgb}, 0.3), 0 20px 40px rgba(${theme.accentRgb}, 0.06)`;
-      }}
-      onMouseLeave={(e) => {
-        (e.currentTarget as HTMLElement).style.boxShadow = `0 0 0 1px rgba(${theme.accentRgb}, 0.08)`;
-      }}>
-      <div className="absolute inset-y-0 left-0 w-[3px] rounded-l-2xl transition-all duration-300 group-hover:w-[4px]"
-        style={{ background: theme.accent }} />
-      <div className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-500 group-hover:opacity-100"
-        style={{ background: `radial-gradient(ellipse 60% 50% at 0% 50%, rgba(${theme.accentRgb}, 0.06) 0%, transparent 70%)` }} />
-      <div className="relative px-6 py-5">
-        <div className="mb-5 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className={`flex h-9 w-9 items-center justify-center rounded-xl border-2 ${theme.border} ${theme.bg} ${theme.text}`}>{theme.icon}</div>
-            <span className={`text-sm font-bold uppercase tracking-[0.18em] ${theme.text}`}>{theme.label}</span>
-          </div>
-          <span className={`rounded-full border px-3 py-1 text-xs font-semibold tabular-nums ${theme.border} ${theme.text}`}>{domain.skills.length} skills</span>
         </div>
-        <p className="mb-2.5 text-xs font-semibold uppercase tracking-[0.2em] text-slate-500 dark:text-white/35">Core</p>
-        <div className="mb-3 flex flex-wrap gap-2">
-          {domain.primary.map((skill) => (
-            <span key={skill} className={`rounded-lg border px-3.5 py-1.5 text-sm font-semibold ${theme.pillBg} ${theme.pillText}`}>{skill}</span>
-          ))}
+      </section>
+
+      {/* ── ABOUT ────────────────────────────────────────────────────────── */}
+      <section id="about" className="relative z-10 max-w-7xl mx-auto px-6 py-24">
+        <div className="grid lg:grid-cols-2 gap-16 items-start">
+          <motion.div
+            variants={fadeUp} initial="hidden" whileInView="show" viewport={{ once: true }}
+          >
+            <p className="text-xs font-semibold uppercase tracking-widest text-slate-500 mb-4">About</p>
+            <h2 className="text-4xl lg:text-5xl font-black text-white leading-tight">
+              Research-grade models,{" "}
+              <span className="text-purple-400">production-grade</span>
+              <br />
+              engineering.
+            </h2>
+          </motion.div>
+
+          <motion.div
+            variants={fadeUp} initial="hidden" whileInView="show" viewport={{ once: true }} custom={1}
+            className="space-y-5 pt-8 lg:pt-0"
+          >
+            <p className="text-slate-300 leading-relaxed">
+              I&apos;m an AI/ML Engineer with 5+ years of experience designing, training, and
+              deploying large-scale AI systems — including foundation models, multimodal LLMs, and
+              enterprise machine learning solutions. Experienced in distributed model training,
+              Generative AI, RAG, RLHF, MLOps, and scalable inference across GPU clusters and cloud
+              platforms, delivering production-ready AI for millions of users.
+            </p>
+            <p className="text-slate-300 leading-relaxed">
+              At Meta, I lead multimodal training pipelines, Mixture-of-Experts optimization,
+              SFT/RLHF/DPO alignment, RAG systems, and inference platforms that serve hundreds of
+              millions of requests daily. Before that at Accenture, I shipped industrial predictive
+              maintenance, computer vision inspection, digital twins, and cloud-native MLOps from
+              petabyte-scale sensor data to real-time scoring APIs.
+            </p>
+            <p className="text-slate-300 leading-relaxed">
+              I&apos;m passionate about building intelligent systems that combine cutting-edge
+              research with robust engineering — measurable quality gains, governed LLMOps, and
+              inference that stays reliable and cost-efficient at scale.
+            </p>
+          </motion.div>
         </div>
-        {secondary.length > 0 && (
-          <>
-            <div className="my-4 h-px" style={{ background: `linear-gradient(90deg, rgba(${theme.accentRgb},0.25) 0%, transparent 80%)` }} />
-            <p className="mb-2.5 text-xs font-semibold uppercase tracking-[0.2em] text-slate-500 dark:text-white/35">Also used</p>
-            <div className="flex flex-wrap gap-2">
-              {secondary.map((skill) => (
-                <span key={skill} className="rounded-md border border-slate-200 bg-slate-50 px-3 py-1 text-xs font-medium text-slate-600 dark:border-white/8 dark:bg-white/[0.025] dark:text-white/50">{skill}</span>
-              ))}
+      </section>
+
+      {/* ── TECH STACK ───────────────────────────────────────────────────── */}
+      <section id="skills" className="relative z-10 max-w-7xl mx-auto px-6 py-24">
+        <motion.div
+          variants={fadeUp} initial="hidden" whileInView="show" viewport={{ once: true }}
+          className="mb-10"
+        >
+          <p className="text-xs font-semibold uppercase tracking-widest text-slate-500 mb-4">Tech Stack</p>
+          <h2 className="text-4xl lg:text-5xl font-black text-white leading-tight mb-3">
+            Technologies I build{" "}
+            <span className="text-purple-400">with</span>
+          </h2>
+          <p className="text-slate-400 max-w-xl">
+            Languages, frameworks, training stacks, data platforms, and MLOps tooling I use to
+            design, train, evaluate, and serve large-scale AI systems.
+          </p>
+        </motion.div>
+
+        {/* Stats row */}
+        <motion.div
+          variants={fadeUp} initial="hidden" whileInView="show" viewport={{ once: true }} custom={1}
+          className="flex flex-wrap gap-3 mb-8"
+        >
+          {[
+            { value: String(totalSkills), label: "TOTAL SKILLS" },
+            { value: String(skillDomains.length), label: "DOMAINS" },
+            { value: "5+", label: "YEARS XP" },
+            { value: "AI/ML", label: "FOCUS" },
+          ].map((s) => (
+            <div
+              key={s.label}
+              className="flex items-baseline gap-2 px-4 py-2 rounded-lg border border-white/8 bg-white/3 text-sm"
+            >
+              <span className="font-bold text-white">{s.value}</span>
+              <span className="text-xs text-slate-500 uppercase tracking-wide">{s.label}</span>
             </div>
-          </>
-        )}
-      </div>
-    </motion.div>
-  );
-}
-
-function SkillsSection() {
-  const [active, setActive] = useState<Tab>("All");
-  const totalSkills = SKILL_DOMAINS.reduce((acc, d) => acc + d.skills.length, 0);
-  const visibleDomains = active === "All" ? SKILL_DOMAINS : SKILL_DOMAINS.filter((d) => d.id === active);
-
-  return (
-    <section id="skills">
-      <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp}>
-        <SectionTitle
-          eyebrow="Tech Stack"
-          title={<>Technologies I build <span className="text-[#9D4EDD]">with</span></>}
-          description="A structured view of the languages, frameworks, platforms, and tools I use across full-stack engineering, cloud systems, and applied AI."
-        />
-      </motion.div>
-      <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp} className="mt-10 flex flex-wrap gap-4">
-        {[
-          { label: "Total Skills", value: totalSkills },
-          { label: "Domains", value: SKILL_DOMAINS.length },
-          { label: "Years XP", value: "4+" },
-          { label: "Stack Depth", value: "Full" },
-        ].map((s) => (
-          <div key={s.label} className="flex items-center gap-3 rounded-xl border border-black/10 bg-white/40 px-4 py-2.5 backdrop-blur-xl dark:border-white/8 dark:bg-white/[0.025]">
-            <span className="text-xl font-bold tracking-tight text-slate-900 dark:text-white">{s.value}</span>
-            <span className="text-[10px] uppercase tracking-[0.22em] text-slate-500 dark:text-white/35">{s.label}</span>
-          </div>
-        ))}
-      </motion.div>
-      <motion.div
-        initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp}
-        className="mt-10 flex gap-2 overflow-x-auto pb-2 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-        {ALL_TABS.map((tab) => {
-          const isActive = active === tab;
-          const theme = tab !== "All" ? DOMAIN_THEMES[tab] : null;
-          return (
-            <button key={tab} type="button" onClick={() => setActive(tab)}
-              className={`shrink-0 whitespace-nowrap rounded-xl px-5 py-2 text-sm font-medium tracking-wide transition-all duration-200 ${
-                isActive ? "text-white" : "border border-black/10 bg-black/[0.03] text-slate-600 hover:text-slate-900 dark:border-white/10 dark:bg-white/[0.03] dark:text-white/50 dark:hover:text-white/80"
-              }`}
-              style={isActive ? (theme ? {
-                background: `linear-gradient(135deg, rgba(${theme.accentRgb},0.25) 0%, rgba(${theme.accentRgb},0.12) 100%)`,
-                border: `1px solid rgba(${theme.accentRgb},0.4)`,
-                boxShadow: `0 4px 16px rgba(${theme.accentRgb},0.15)`,
-                color: theme.accent,
-              } : {
-                background: "linear-gradient(135deg, rgba(157,78,221,0.25) 0%, rgba(124,58,237,0.12) 100%)",
-                border: "1px solid rgba(157,78,221,0.4)",
-                boxShadow: "0 4px 16px rgba(157,78,221,0.15)",
-                color: "#C084FC",
-              }) : {}}>
-              {tab === "All" ? "All Domains" : DOMAIN_THEMES[tab].label}
-            </button>
-          );
-        })}
-      </motion.div>
-      <AnimatePresence mode="wait">
-        <motion.div key={active} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -8 }} transition={{ duration: 0.25 }}
-          className={`mt-8 grid gap-4 ${active === "All" ? "sm:grid-cols-2 xl:grid-cols-3" : "grid-cols-1 max-w-4xl"}`}>
-          {visibleDomains.map((domain, i) => (
-            <DomainCard key={domain.id} domain={domain} index={i} expanded={active !== "All"} />
           ))}
         </motion.div>
-      </AnimatePresence>
-    </section>
-  );
-}
 
-export default function Portfolio() {
-  const [activeSection, setActiveSection] = useState("home");
-  const [menuOpen, setMenuOpen] = useState(false);
+        {/* Filter tabs */}
+        <motion.div
+          variants={fadeUp} initial="hidden" whileInView="show" viewport={{ once: true }} custom={2}
+          className="flex flex-wrap gap-2 mb-8"
+        >
+          {filterTabs.map((tab) => (
+            <button
+              key={tab}
+              onClick={() => setActiveFilter(tab)}
+              className={`px-3 py-1.5 rounded-full text-xs font-medium transition-colors ${
+                activeFilter === tab
+                  ? "bg-purple-600 !text-white"
+                  : "border border-white/10 text-slate-400 hover:text-white hover:border-white/25"
+              }`}
+            >
+              {tab}
+            </button>
+          ))}
+        </motion.div>
 
-  useEffect(() => {
-    const style = document.createElement("style");
-    style.id = "__pf-focus";
-    style.textContent = "*:focus-visible{outline:2px solid #9D4EDD!important;outline-offset:2px;border-radius:4px;}";
-    if (!document.getElementById("__pf-focus")) document.head.appendChild(style);
-    return () => document.getElementById("__pf-focus")?.remove();
-  }, []);
-
-  useEffect(() => {
-    document.body.style.overflow = menuOpen ? "hidden" : "";
-    return () => { document.body.style.overflow = ""; };
-  }, [menuOpen]);
-
-  useEffect(() => {
-    const ids = ["home", "skills", "projects", "work", "experience", "education", "about", "contact"];
-    const observers: IntersectionObserver[] = [];
-    ids.forEach((id) => {
-      const el = document.getElementById(id);
-      if (!el) return;
-      const obs = new IntersectionObserver(
-        ([entry]) => { if (entry.isIntersecting) setActiveSection(id); },
-        { rootMargin: "-30% 0px -60% 0px" }
-      );
-      obs.observe(el);
-      observers.push(obs);
-    });
-    return () => observers.forEach((o) => o.disconnect());
-  }, []);
-
-  return (
-    <div className="relative min-h-screen overflow-hidden bg-[#f7f8fc] text-slate-900 transition-colors dark:bg-[#0b1020] dark:text-white">
-      <ProgressBar />
-      <BackToTop />
-      <MobileMenu open={menuOpen} onClose={() => setMenuOpen(false)} activeSection={activeSection} />
-      <Starfield />
-
-      <div className="relative z-10 mx-auto max-w-[104rem] px-6 md:px-10 xl:px-16">
-
-        {/* ── HEADER ── */}
-        <header className="sticky top-0 z-50 bg-transparent">
-          <div className="flex items-center justify-between py-7">
-            <a href="#home" className="text-3xl font-extrabold tracking-tight text-slate-900 dark:text-white/95">
-              Krishna's <span className="text-[#9D4EDD]">Portfolio</span>
-            </a>
-            <div className="flex items-center gap-4 xl:gap-6">
-              <nav className="hidden gap-8 text-base font-medium text-slate-700 dark:text-white/80 lg:flex xl:gap-10">
-                {NAV_LINKS.map((link) => {
-                  const id = link.href.replace("#", "");
-                  const isActive = activeSection === id;
-                  return (
-                    <a key={link.href} href={link.href}
-                      className={`transition-colors duration-200 ${isActive ? "text-[#9D4EDD]" : "hover:text-slate-900 dark:hover:text-white"}`}>
-                      {link.label}
-                    </a>
-                  );
-                })}
-              </nav>
-              <ThemeToggle />
-              <button onClick={() => setMenuOpen(true)}
-                className="flex h-9 w-9 items-center justify-center rounded-full border border-black/10 text-slate-700 transition hover:border-black/20 hover:text-slate-900 dark:border-white/10 dark:text-white/70 dark:hover:border-white/20 dark:hover:text-white lg:hidden"
-                aria-label="Open menu">
-                <Menu className="h-4 w-4" />
-              </button>
-            </div>
-          </div>
-        </header>
-
-        <main id="home" className="space-y-32 py-8 md:py-14">
-
-          {/* ── HERO ── */}
-          <section className="grid min-h-[90vh] items-center gap-14 xl:grid-cols-[1.08fr_0.92fr] xl:gap-20">
-            <motion.div initial="hidden" animate="visible" variants={fadeUp} className="max-w-[52rem]">
-              <h2 className="mb-5 text-2xl font-extrabold tracking-tight sm:text-3xl">
-                <span className="text-slate-900 dark:text-white">Hi, I'm Krishna Koushik </span>
-                <span className="bg-gradient-to-r from-[#9D4EDD] to-[#7C3AED] bg-clip-text text-transparent">Unnam.</span>
-              </h2>
-              <div className="mb-7 flex flex-wrap items-center gap-3">
-                <div className="inline-flex items-center rounded-full border border-black/10 bg-black/[0.03] px-5 py-2 text-[11px] uppercase tracking-[0.28em] text-slate-700 backdrop-blur dark:border-white/10 dark:bg-white/[0.04] dark:text-white/80">
-                  Full-Stack Engineer • Cloud, Backend & Applied AI
+        {/* Skill cards */}
+        <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+          {visibleDomains.map((domain, i) => (
+            <motion.div
+              key={domain.id}
+              variants={fadeUp} initial="hidden" whileInView="show" viewport={{ once: true }} custom={i}
+              className="rounded-xl border border-white/8 bg-white/3 p-5 relative overflow-hidden"
+              style={{ borderLeft: `3px solid ${domain.border}` }}
+            >
+              <div className="flex items-start justify-between mb-4">
+                <div className="flex items-center gap-2.5">
+                  <div className={`w-7 h-7 rounded-lg flex items-center justify-center ${domain.iconCls}`}>
+                    {domain.icon}
+                  </div>
+                  <span className={`text-xs font-bold tracking-widest ${domain.labelCls}`}>
+                    {domain.label}
+                  </span>
                 </div>
-                <div className="inline-flex items-center gap-1.5 rounded-full border border-violet-500/30 bg-violet-500/10 px-4 py-2 text-[11px] font-medium text-violet-600 dark:text-violet-400">
-                  M.S. CS @ USF · 3.89 GPA
-                </div>
-                <div className="inline-flex items-center gap-2 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-4 py-2 text-[11px] font-medium text-emerald-600 dark:text-emerald-400">
-                  <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-emerald-500 dark:bg-emerald-400" />
-                  Available Now
-                </div>
+                <span className="skill-count">
+                  {domain.core.length + domain.also.length} skills
+                </span>
               </div>
-              <h1 className="max-w-[44rem] text-4xl font-semibold leading-[1.05] tracking-[-0.03em] text-slate-900 dark:text-white sm:text-5xl md:text-[3.5rem] xl:text-[4.25rem]">
-                I build reliable full-stack systems and AI products that ship.
-              </h1>
-              <p className="mt-8 max-w-[36rem] text-lg leading-8 text-slate-600 dark:text-white/60 md:text-[1.2rem]">
-                Full-stack engineer with 4+ years across healthcare, fintech, and academic platforms —
-                building with Java, Spring Boot, React, TypeScript, Azure, and LLM systems.
-              </p>
-              <div className="mt-6 flex items-start gap-3 rounded-2xl border border-black/8 bg-black/[0.02] px-5 py-3.5 dark:border-white/8 dark:bg-white/[0.025]">
-                <BookOpen className="mt-0.5 h-4 w-4 shrink-0 text-[#9D4EDD]" />
-                <p className="text-sm text-slate-600 dark:text-white/55">
-                  <span className="font-medium text-slate-900 dark:text-white/85">Currently exploring: </span>
-                  multi-agent coordination patterns, Rust for systems programming, and real-time inference optimisation with vLLM.
-                </p>
+
+              <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-500 mb-2">Core</p>
+              <div className="flex flex-wrap gap-1.5 mb-4">
+                {domain.core.map((s) => (
+                  <span key={s} className={`px-2 py-0.5 rounded-md text-xs font-medium ${domain.coreCls}`}>
+                    {s}
+                  </span>
+                ))}
               </div>
-              <div className="mt-10 flex flex-wrap gap-4">
-                <a href="#projects" className="inline-flex items-center rounded-full bg-gradient-to-r from-[#7C3AED] to-[#9D4EDD] px-6 py-3 text-sm font-medium text-white transition hover:opacity-95">
-                  View Projects <ArrowRight className="ml-2 h-4 w-4" />
-                </a>
-                <a href="/resume.pdf"
-                  className="inline-flex items-center rounded-full border border-black/12 bg-black/[0.03] px-6 py-3 text-sm text-slate-800 transition hover:bg-gradient-to-r hover:from-[#7C3AED] hover:to-[#9D4EDD] hover:text-white hover:border-transparent dark:border-white/12 dark:bg-white/[0.03] dark:text-white/85">
-                  Resume <Download className="ml-2 h-4 w-4" />
-                </a>
-              </div>
-              <div className="mt-10 flex items-center gap-4 text-slate-500 dark:text-white/55">
-                {[
-                  { href: "https://github.com/krishnakoushik225", icon: <Github className="h-5 w-5" />, label: "GitHub" },
-                  { href: "https://www.linkedin.com/in/krishna-koushik-unnam-a952741b5/", icon: <Linkedin className="h-5 w-5" />, label: "LinkedIn" },
-                  { href: "mailto:krishnakoushiku@gmail.com", icon: <Mail className="h-5 w-5" />, label: "Email" },
-                ].map((s) => (
-                  <a key={s.label} href={s.href}
-                    target={s.href.startsWith("http") ? "_blank" : undefined}
-                    rel={s.href.startsWith("http") ? "noreferrer" : undefined}
-                    aria-label={s.label}
-                    className="rounded-full border border-black/10 bg-black/[0.03] p-3.5 transition hover:border-black/20 hover:text-slate-900 dark:border-white/10 dark:bg-white/[0.03] dark:hover:border-white/20 dark:hover:text-white">
-                    {s.icon}
-                  </a>
+
+              <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-500 mb-2">Also Used</p>
+              <div className="flex flex-wrap gap-1.5">
+                {domain.also.map((s) => (
+                  <span key={s} className={`px-2 py-0.5 rounded-md text-xs ${domain.alsoCls}`}>
+                    {s}
+                  </span>
                 ))}
               </div>
             </motion.div>
+          ))}
+        </div>
+      </section>
 
-            {/* Avatar card */}
+      {/* ── WORK ─────────────────────────────────────────────────────────── */}
+      <section id="work" className="relative z-10 max-w-7xl mx-auto px-6 py-24">
+        <motion.div
+          variants={fadeUp} initial="hidden" whileInView="show" viewport={{ once: true }}
+          className="mb-12"
+        >
+          <h2 className="text-4xl lg:text-5xl font-black text-white leading-tight">
+            Enterprise AI platforms I helped
+            <br />
+            <span className="text-purple-400">build</span>
+          </h2>
+          <p className="text-slate-400 mt-3 max-w-xl">
+            End-to-end ownership across foundation model training, alignment, RAG, industrial ML,
+            and production inference — shipped outcomes at scale.
+          </p>
+        </motion.div>
+
+        <div className="grid lg:grid-cols-2 gap-5">
+          {workCards.map((job, i) => (
             <motion.div
-              initial={{ opacity: 0, y: 28, scale: 0.98 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              transition={{ duration: 0.8, delay: 0.08, ease: "easeOut" }}
-              className="relative flex justify-center xl:justify-end">
-              <motion.div animate={{ y: [0, -8, 0] }} transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-                className="relative w-full max-w-[31rem] xl:max-w-[34rem]">
-                <div className="absolute -inset-4 rounded-[2.3rem] bg-black/5 blur-2xl dark:bg-white/5" />
-                <div className="relative overflow-hidden rounded-[2.2rem] border border-black/10 bg-white/50 p-5 shadow-2xl backdrop-blur-2xl dark:border-white/10 dark:bg-white/[0.04]">
-                  <div className="rounded-[1.8rem] border border-black/10 bg-white/70 p-5 dark:border-white/10 dark:bg-[#0c1226]/95">
-                    <div className="mb-4 flex items-center justify-between">
-                      <p className="text-[11px] uppercase tracking-[0.28em] text-slate-500 dark:text-white/40">Overview</p>
-                      <span className="rounded-full border border-black/10 px-3 py-1 text-[10px] uppercase tracking-[0.22em] text-slate-500 dark:border-white/10 dark:text-white/40">
-                        Software Engineer
+              key={job.company}
+              variants={fadeUp} initial="hidden" whileInView="show" viewport={{ once: true }} custom={i}
+              className="rounded-xl border border-white/8 bg-white/3 p-6"
+            >
+              <div className="flex items-start justify-between mb-3">
+                <span className="text-[10px] font-semibold uppercase tracking-widest text-slate-500 border border-white/8 px-2 py-1 rounded-full">
+                  Professional Work
+                </span>
+                <Briefcase size={14} className="text-slate-600" />
+              </div>
+              <h3 className="text-lg font-bold text-white mb-2 leading-snug">{job.company}</h3>
+              <p className="text-sm text-slate-400 leading-relaxed mb-4">{job.desc}</p>
+              <div className="space-y-2">
+                {job.achievements.map((a, j) => (
+                  <div key={j} className="text-xs text-slate-400 leading-relaxed p-3 rounded-lg bg-white/3 border border-white/5">
+                    {a}
+                  </div>
+                ))}
+              </div>
+            </motion.div>
+          ))}
+        </div>
+      </section>
+
+      {/* ── PROJECTS ─────────────────────────────────────────────────────── */}
+      <section id="projects" className="relative z-10 max-w-7xl mx-auto px-6 py-24">
+        <motion.div
+          variants={fadeUp} initial="hidden" whileInView="show" viewport={{ once: true }}
+          className="mb-12"
+        >
+          <p className="text-xs font-semibold uppercase tracking-widest text-slate-500 mb-4">Selected Projects</p>
+          <h2 className="text-4xl lg:text-5xl font-black text-white leading-tight">
+            Selected work{" "}
+            <span className="text-purple-400">worth exploring</span>
+          </h2>
+          <p className="text-slate-400 mt-3 max-w-xl">
+            Each project includes the engineering decision that mattered most — not just what was
+            built, but why it was built that way.
+          </p>
+        </motion.div>
+
+        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+          {projects.map((p, i) => (
+            <motion.div
+              key={p.title}
+              variants={fadeUp} initial="hidden" whileInView="show" viewport={{ once: true }} custom={i}
+              className="rounded-xl border border-white/8 bg-white/3 overflow-hidden group hover:border-purple-500/30 transition-all duration-300"
+            >
+                    {/* Project banner image */}
+              <div className="w-full overflow-hidden" style={{ height: 180 }}>
+                <img
+                  src={p.image}
+                  alt={p.title}
+                  className="w-full h-full object-cover"
+                />
+              </div>
+
+              <div className="p-5">
+                <div className="flex items-start justify-between gap-2 mb-3">
+                  <h3 className="font-semibold text-white text-base leading-snug group-hover:text-purple-300 transition-colors">
+                    {p.title}
+                  </h3>
+                  <a
+                    href={p.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="w-7 h-7 flex items-center justify-center rounded-lg border border-white/10 text-slate-400 hover:text-purple-400 hover:border-purple-500/40 transition-all shrink-0"
+                    onClick={(e) => e.stopPropagation()}
+                  >
+                    <ExternalLink size={13} />
+                  </a>
+                </div>
+                <p className="text-sm text-slate-400 leading-relaxed mb-4">{p.desc}</p>
+
+                {/* Key insight */}
+                <div className="p-3 rounded-lg bg-yellow-500/5 border border-yellow-500/15 mb-4">
+                  <p className="text-[10px] font-semibold uppercase tracking-widest text-yellow-500/80 mb-1.5">
+                    Key Insight
+                  </p>
+                  <p className="text-xs text-slate-400 leading-relaxed">{p.insight}</p>
+                </div>
+
+                {/* Tech stack */}
+                <div>
+                  <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-500 mb-2">
+                    Tech Stack
+                  </p>
+                  <div className="flex flex-wrap gap-1.5">
+                    {p.tags.map((tag) => (
+                      <span
+                        key={tag}
+                        className="px-2 py-0.5 rounded-md text-xs bg-white/5 text-slate-400 border border-white/8"
+                      >
+                        {tag}
                       </span>
-                    </div>
-                    <div className="relative overflow-hidden rounded-[1.6rem] border border-black/10 bg-[linear-gradient(180deg,rgba(15,23,42,0.06),rgba(15,23,42,0.02))] dark:border-white/10 dark:bg-[linear-gradient(180deg,rgba(255,255,255,0.08),rgba(255,255,255,0.02))]">
-                      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(15,23,42,0.08),transparent_40%)] dark:bg-[radial-gradient(circle_at_top,rgba(255,255,255,0.10),transparent_40%)]" />
-                      <div className="relative flex h-[31rem] items-end justify-center overflow-hidden">
-                        <img src="/bitmoji.png" alt="Krishna Koushik avatar" className="relative z-10 h-full w-full object-cover object-center" />
-                      </div>
-                    </div>
-                    <div className="mt-4 grid gap-3 sm:grid-cols-2">
-                      <div className="rounded-2xl border border-black/10 bg-black/[0.02] p-4 dark:border-white/10 dark:bg-white/[0.03]">
-                        <p className="text-sm text-slate-500 dark:text-white/45">Focus</p>
-                        <p className="mt-2 text-base font-medium text-slate-900 dark:text-white/90">Full-Stack, Cloud, Applied AI</p>
-                      </div>
-                      <div className="rounded-2xl border border-black/10 bg-black/[0.02] p-4 dark:border-white/10 dark:bg-white/[0.03]">
-                        <p className="text-sm text-slate-500 dark:text-white/45">GPA</p>
-                        <p className="mt-2 text-base font-medium text-slate-900 dark:text-white/90">3.89 / 4.0 — M.S. CS</p>
-                      </div>
-                    </div>
+                    ))}
                   </div>
                 </div>
-              </motion.div>
+              </div>
             </motion.div>
-          </section>
+          ))}
+        </div>
+      </section>
 
-          {/* ── ABOUT ── */}
-          <section id="about" className="grid gap-12 xl:grid-cols-[0.95fr_1.05fr] xl:items-start">
-            <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp}>
-              <SectionTitle
-                eyebrow="About"
-                title={<>Engineering with <span className="text-[#9D4EDD]">opinions,</span> not just output.</>}
+      {/* ── EXPERIENCE ───────────────────────────────────────────────────── */}
+      <section id="experience" className="relative z-10 max-w-7xl mx-auto px-6 py-24">
+        {/* Company logos strip */}
+        <motion.div
+          variants={fadeUp} initial="hidden" whileInView="show" viewport={{ once: true }}
+          className="mb-16"
+        >
+          <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-500 mb-4 text-center">
+            Enterprise Experience At
+          </p>
+          <div className="flex items-center justify-center gap-4 flex-wrap">
+            {companyLogos.map((logo) => (
+              <img
+                key={logo.alt}
+                src={logo.src}
+                alt={logo.alt}
+                className="w-12 h-12 rounded-xl border border-white/8 object-cover"
               />
-            </motion.div>
-            <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp}
-              className="max-w-3xl space-y-6 text-slate-600 dark:text-white/60">
-              <p className="text-xl leading-9">
-                I'm a full-stack engineer with 4+ years of enterprise experience across healthcare, fintech,
-                and academic systems — and a parallel track in applied AI research. I've shipped production systems
-                at Optum and BNP Paribas, owned features end-to-end at USF, and built agentic AI pipelines that
-                go meaningfully beyond demo quality.
-              </p>
-              <p className="text-xl leading-9">
-                I learned the hard way at USF that optimising for speed before observability creates a maintenance
-                trap. We shipped a Redis caching layer that shaved 500ms off API responses — and then spent two
-                weeks debugging a cache invalidation bug that only appeared under concurrent load. Now I instrument
-                everything before I optimise anything.
-              </p>
-              <p className="text-xl leading-9">
-                On the AI side: I'm more interested in correctness and explainability than raw benchmark scores.
-                Every project I build includes citation grounding, confidence thresholds, or structured failure
-                modes — because a system that fails loudly is more useful in production than one that fails silently.
-              </p>
-            </motion.div>
-          </section>
-
-          {/* ── SKILLS ── */}
-          <SkillsSection />
-
-          {/* ── PROJECTS ── */}
-          <section id="projects">
-            <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp}>
-              <SectionTitle
-                eyebrow="Selected Projects"
-                title={<>Selected work <span className="text-[#9D4EDD]">worth exploring</span></>}
-                description="Each project includes the engineering decision that mattered most — not just what was built, but why it was built that way."
-              />
-            </motion.div>
-            <div className="mt-14 grid gap-6 md:grid-cols-2 xl:grid-cols-3">
-              {featuredProjects.map((project, index) => (
-                <motion.article key={project.title} custom={index} initial="hidden" whileInView="visible"
-                  viewport={{ once: true, amount: 0.15 }} variants={fadeUp}
-                  className="group overflow-hidden rounded-[1.8rem] border border-black/10 bg-white/40 backdrop-blur-xl transition hover:-translate-y-2 hover:shadow-xl hover:border-black/18 dark:border-white/10 dark:bg-white/[0.03] dark:hover:border-white/18">
-                  <div
-                    className="aspect-[16/10] overflow-hidden border-b border-black/10 dark:border-white/10"
-                    style={{ background: "linear-gradient(135deg, #1e1b4b 0%, #312e81 50%, #4c1d95 100%)" }}>
-                    <img src={project.image} alt={project.title}
-                      className="h-full w-full object-cover transition duration-500 group-hover:scale-[1.03]"
-                      onError={(e) => { e.currentTarget.style.display = "none"; }} />
-                  </div>
-                  <div className="p-6">
-                    <div className="flex items-start justify-between gap-4">
-                      <h3 className="text-[1.35rem] font-semibold tracking-[-0.03em] text-slate-900 dark:text-white">{project.title}</h3>
-                      <div className="flex shrink-0 items-center gap-2">
-                        {project.demo && (
-                          <a href={project.demo} target="_blank" rel="noreferrer"
-                            className="rounded-full border border-black/10 p-2.5 text-slate-500 transition hover:border-[#9D4EDD]/40 hover:text-[#9D4EDD] dark:border-white/10 dark:text-white/50"
-                            title="Live Demo">
-                            <Globe className="h-4 w-4" />
-                          </a>
-                        )}
-                        <a href={project.github} target="_blank" rel="noreferrer"
-                          className="rounded-full border border-black/10 p-2.5 text-slate-500 transition hover:border-black/18 hover:text-slate-900 dark:border-white/10 dark:text-white/50 dark:hover:border-white/18 dark:hover:text-white"
-                          title="GitHub">
-                          <ExternalLink className="h-4 w-4" />
-                        </a>
-                      </div>
-                    </div>
-                    <p className="mt-4 text-[0.96rem] leading-7 text-slate-600 dark:text-white/58">{project.description}</p>
-                    <div className="mt-4 rounded-xl border border-[#9D4EDD]/15 bg-[#9D4EDD]/[0.04] px-4 py-3">
-                      <p className="mb-1 text-[9px] uppercase tracking-[0.28em] text-[#9D4EDD]/70">Key insight</p>
-                      <p className="text-[11px] leading-6 text-slate-600 dark:text-white/55">{project.insight}</p>
-                    </div>
-                    <div className="mt-5">
-                      <p className="mb-3 text-xs uppercase tracking-[0.24em] text-slate-500 dark:text-white/45">Tech Stack</p>
-                      <div className="flex flex-wrap gap-2">
-                        {project.stack.map((item) => (
-                          <span key={item} className="rounded-full border border-black/10 px-3 py-1 text-xs text-slate-600 dark:border-white/10 dark:text-white/60">{item}</span>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-                </motion.article>
-              ))}
-            </div>
-          </section>
-
-          {/* ── ENTERPRISE WORK ── */}
-          <section id="work">
-            <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp}>
-              <SectionTitle
-                eyebrow="Professional Work"
-                title={<>Enterprise platforms <span className="text-[#9D4EDD]">I helped build</span></>}
-                description="End-to-end ownership across healthcare, fintech, and academic systems — not just contributions, but shipped outcomes."
-              />
-            </motion.div>
-            <div className="mt-14 grid gap-6 xl:grid-cols-2">
-              {enterpriseWork.map((item, index) => (
-                <motion.article key={item.title} custom={index} initial="hidden" whileInView="visible"
-                  viewport={{ once: true, amount: 0.2 }} variants={fadeUp}
-                  className="rounded-[1.9rem] border border-black/10 bg-white/40 p-6 backdrop-blur-xl dark:border-white/10 dark:bg-white/[0.03]">
-                  <div className="flex items-start justify-between gap-4">
-                    <div>
-                      <span className="inline-flex rounded-full border border-black/10 px-3 py-1 text-[10px] uppercase tracking-[0.22em] text-slate-500 dark:border-white/10 dark:text-white/42">{item.badge}</span>
-                      <h3 className="mt-4 text-[1.65rem] font-semibold leading-snug tracking-[-0.03em] text-slate-900 dark:text-white">{item.title}</h3>
-                    </div>
-                    <div className="rounded-full border border-black/10 p-3 text-slate-500 dark:border-white/10 dark:text-white/45">
-                      <Briefcase className="h-5 w-5" />
-                    </div>
-                  </div>
-                  <p className="mt-5 text-[1rem] leading-8 text-slate-600 dark:text-white/58">{item.description}</p>
-                  <ul className="mt-6 space-y-3">
-                    {item.highlights.map((h) => (
-                      <li key={h} className="rounded-xl border border-black/10 bg-black/[0.02] px-4 py-3 text-[0.96rem] leading-7 text-slate-700 dark:border-white/10 dark:bg-white/[0.03] dark:text-white/72">{h}</li>
-                    ))}
-                  </ul>
-                </motion.article>
-              ))}
-            </div>
-          </section>
-
-          {/* ── SOCIAL PROOF STRIP ── */}
-          <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp}
-            className="border-y border-black/8 py-10 dark:border-white/8">
-            <p className="mb-7 text-center text-[10px] uppercase tracking-[0.35em] text-slate-400 dark:text-white/30">
-              Enterprise experience at
-            </p>
-            <div className="flex flex-wrap items-center justify-center gap-10">
-              {experience.map((e) => (
-                <img key={e.org} src={e.icon} alt={e.org}
-                  className="h-8 object-contain opacity-40 grayscale transition duration-300 hover:opacity-75 hover:grayscale-0"
-                  title={e.org} />
-              ))}
-            </div>
-          </motion.div>
-
-          {/* ── EXPERIENCE ── */}
-          <section id="experience">
-            <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp}>
-              <SectionTitle
-                eyebrow="Experience"
-                title={<>Where <span className="text-[#9D4EDD]">I've worked</span></>}
-                description="Company-backed engineering across healthcare, fintech, and academic platforms — with exact dates, team context, and scope."
-              />
-            </motion.div>
-            <div className="mt-14 space-y-5">
-              {experience.map((item, index) => (
-                <motion.article key={item.role + item.org} custom={index} initial="hidden" whileInView="visible"
-                  viewport={{ once: true, amount: 0.2 }} variants={fadeUp}
-                  className="rounded-[1.8rem] border border-black/10 bg-white/40 px-6 py-7 backdrop-blur-xl dark:border-white/10 dark:bg-white/[0.03]">
-                  <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
-                    <div className="flex items-start gap-5">
-                      <div className="flex shrink-0 items-center justify-center pt-1">
-                        <img src={item.icon} alt={item.org} className="h-14 w-14 rounded-lg object-contain" />
-                      </div>
-                      <div>
-                        <h3 className="text-[1.7rem] font-semibold tracking-[-0.03em] text-slate-900 dark:text-white">{item.role}</h3>
-                        <p className="mt-1 text-lg text-slate-600 dark:text-white/55">{item.org}</p>
-                      </div>
-                    </div>
-                    <p className="shrink-0 text-base text-slate-500 dark:text-white/42">{item.period}</p>
-                  </div>
-                  <p className="mt-5 max-w-5xl text-[1rem] leading-8 text-slate-600 dark:text-white/58">{item.summary}</p>
-                </motion.article>
-              ))}
-            </div>
-          </section>
-
-          {/* ── EDUCATION ── */}
-          <section id="education">
-            <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp}>
-              <SectionTitle
-                eyebrow="Education"
-                title={<>Academic <span className="text-[#9D4EDD]">foundation</span></>}
-                description="Formal training in computer science, distributed systems, machine learning, and software engineering."
-              />
-            </motion.div>
-            <div className="mt-14 grid gap-6 xl:grid-cols-2">
-              {education.map((item, index) => (
-                <motion.article key={item.degree + item.school} custom={index} initial="hidden" whileInView="visible"
-                  viewport={{ once: true, amount: 0.2 }} variants={fadeUp}
-                  className="rounded-[1.8rem] border border-black/10 bg-white/40 p-6 backdrop-blur-xl dark:border-white/10 dark:bg-white/[0.03]">
-                  <div className="flex items-start gap-5">
-                    <div className="flex shrink-0 items-center justify-center pt-1">
-                      {item.icon
-                        ? <img src={item.icon} alt={item.school} className="h-14 w-14 rounded-lg object-contain" />
-                        : <GraduationCap className="h-10 w-10 text-slate-400 dark:text-white/40" />}
-                    </div>
-                    <div className="flex-1">
-                      <h3 className="text-[1.3rem] font-semibold tracking-[-0.03em] text-slate-900 dark:text-white">{item.degree}</h3>
-                      <p className="mt-1 text-lg text-slate-600 dark:text-white/60">{item.school}</p>
-                      <div className="mt-4 flex flex-wrap items-center gap-3 text-sm text-slate-500 dark:text-white/45">
-                        <span>{item.period}</span><span>•</span><span>{item.details}</span>
-                      </div>
-                    </div>
-                  </div>
-                </motion.article>
-              ))}
-            </div>
-          </section>
-
-          {/* ── CONTACT ── */}
-          <motion.section id="contact" initial="hidden" whileInView="visible"
-            viewport={{ once: true, amount: 0.15 }} variants={fadeUp}
-            className="rounded-[2.2rem] border border-black/10 bg-white/40 px-8 py-16 backdrop-blur-2xl md:px-12 dark:border-white/10 dark:bg-white/[0.03]">
-            <div className="text-center">
-              <p className="text-[11px] uppercase tracking-[0.35em] text-slate-500 dark:text-white/42">Contact</p>
-              <h2 className="mt-5 text-4xl font-semibold tracking-[-0.04em] text-slate-900 dark:text-white md:text-6xl">
-                Let's build <span className="text-[#9D4EDD]">something impactful.</span>
-              </h2>
-              <p className="mx-auto mt-6 max-w-2xl text-xl leading-9 text-slate-600 dark:text-white/58">
-                Actively seeking roles where I can contribute across backend, full-stack, cloud, or applied AI systems —
-                and grow alongside engineers who take correctness and craft seriously.
-              </p>
-            </div>
-            <div className="mx-auto mt-12 grid max-w-3xl gap-4 sm:grid-cols-3">
-              {lookingFor.map((card) => (
-                <div key={card.label} className="rounded-2xl border border-black/10 bg-black/[0.02] p-5 dark:border-white/10 dark:bg-white/[0.03]">
-                  <div className="mb-3 flex items-center gap-2 text-[#9D4EDD]">
-                    {card.icon}
-                    <span className="text-[11px] font-semibold uppercase tracking-[0.2em]">{card.label}</span>
-                  </div>
-                  <ul className="space-y-1.5">
-                    {card.items.map((item) => (
-                      <li key={item} className="text-sm text-slate-600 dark:text-white/60">{item}</li>
-                    ))}
-                  </ul>
-                </div>
-              ))}
-            </div>
-            <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
-              <a href="mailto:krishnakoushiku@gmail.com"
-                className="inline-flex items-center rounded-full bg-gradient-to-r from-[#7C3AED] to-[#9D4EDD] px-7 py-3.5 text-sm font-medium text-white transition hover:opacity-95">
-                Get in touch <Mail className="ml-2 h-4 w-4" />
-              </a>
-              <a href="https://github.com/krishnakoushik225" target="_blank" rel="noreferrer"
-                className="inline-flex items-center rounded-full border border-black/12 bg-black/[0.03] px-7 py-3.5 text-sm text-slate-800 transition hover:bg-gradient-to-r hover:from-[#7C3AED] hover:to-[#9D4EDD] hover:text-white hover:border-transparent dark:border-white/12 dark:bg-white/[0.03] dark:text-white/85">
-                GitHub <Github className="ml-2 h-4 w-4" />
-              </a>
-            </div>
-          </motion.section>
-        </main>
-
-        {/* ── FOOTER ── */}
-        <footer className="mt-16 border-t border-black/10 py-8 dark:border-white/10">
-          <div className="flex flex-col items-center justify-between gap-4 text-sm text-slate-500 dark:text-white/35 sm:flex-row">
-            <span>© 2026 Krishna Koushik Unnam. All rights reserved.</span>
-            <div className="flex items-center gap-6">
-              <a href="mailto:krishnakoushiku@gmail.com" className="transition hover:text-slate-900 dark:hover:text-white">Email</a>
-              <a href="https://www.linkedin.com/in/krishna-koushik-unnam-a952741b5/" target="_blank" rel="noreferrer" className="transition hover:text-slate-900 dark:hover:text-white">LinkedIn</a>
-              <a href="https://github.com/krishnakoushik225" target="_blank" rel="noreferrer" className="transition hover:text-slate-900 dark:hover:text-white">GitHub</a>
-            </div>
+            ))}
           </div>
-        </footer>
+          <div className="mt-8 h-px bg-white/5" />
+        </motion.div>
 
-      </div>
-    </div>
+        {/* Where I've worked */}
+        <motion.div
+          variants={fadeUp} initial="hidden" whileInView="show" viewport={{ once: true }}
+          className="mb-12"
+        >
+          <p className="text-xs font-semibold uppercase tracking-widest text-slate-500 mb-4">Experience</p>
+          <h2 className="text-4xl lg:text-5xl font-black text-white leading-tight">
+            Where{" "}
+            <span className="text-purple-400">I&apos;ve worked</span>
+          </h2>
+          <p className="text-slate-400 mt-3 max-w-xl">
+            Company-backed AI/ML engineering across foundation models and industrial machine
+            learning — with exact dates, locations, and scope.
+          </p>
+        </motion.div>
+
+        <div className="space-y-4 mb-20">
+          {timeline.map((job, i) => (
+            <motion.div
+              key={job.company}
+              variants={fadeUp} initial="hidden" whileInView="show" viewport={{ once: true }} custom={i}
+              className="rounded-xl border border-white/8 bg-white/3 p-5"
+            >
+              <div className="flex items-start gap-4">
+                <img
+                  src={job.logo}
+                  alt={job.company}
+                  className="w-11 h-11 rounded-xl border border-white/8 object-cover shrink-0"
+                />
+                <div className="flex-1 min-w-0">
+                  <div className="flex flex-wrap items-start justify-between gap-2">
+                    <div>
+                      <h3 className="font-semibold text-white text-base">{job.role}</h3>
+                      <p className="text-sm text-slate-400">{job.company} · {job.location}</p>
+                    </div>
+                    <span className="text-sm text-slate-500 shrink-0">{job.period}</span>
+                  </div>
+                  <p className="mt-3 text-sm text-slate-400 leading-relaxed">{job.desc}</p>
+                </div>
+              </div>
+            </motion.div>
+          ))}
+        </div>
+
+        {/* Education */}
+        <motion.div
+          variants={fadeUp} initial="hidden" whileInView="show" viewport={{ once: true }}
+          className="mb-10"
+        >
+          <p className="text-xs font-semibold uppercase tracking-widest text-slate-500 mb-4">Education</p>
+          <h2 className="text-4xl lg:text-5xl font-black text-white leading-tight">
+            Academic{" "}
+            <span className="text-purple-400">foundation</span>
+          </h2>
+          <p className="text-slate-400 mt-3 max-w-xl">
+            Formal training in computer science and engineering, backed by cloud and ML
+            certifications.
+          </p>
+        </motion.div>
+
+        <div className="grid md:grid-cols-1 gap-5 mb-10 max-w-2xl">
+          {education.map((edu, i) => (
+            <motion.div
+              key={edu.school}
+              variants={fadeUp} initial="hidden" whileInView="show" viewport={{ once: true }} custom={i}
+              className="rounded-xl border border-white/8 bg-white/3 p-5 flex items-start gap-4"
+            >
+              <img
+                src={edu.logo}
+                alt={edu.school}
+                className="w-11 h-11 rounded-xl border border-white/8 object-cover shrink-0"
+              />
+              <div>
+                <h3 className="font-semibold text-white text-base leading-snug">{edu.degree}</h3>
+                <p className="text-sm text-slate-400 mt-0.5">{edu.school}</p>
+              </div>
+            </motion.div>
+          ))}
+        </div>
+
+        <motion.div
+          variants={fadeUp} initial="hidden" whileInView="show" viewport={{ once: true }}
+          className="mb-6"
+        >
+          <p className="text-xs font-semibold uppercase tracking-widest text-slate-500 mb-4">Certifications</p>
+          <h3 className="text-2xl font-bold text-white">
+            Credentials that{" "}
+            <span className="text-purple-400">back the work</span>
+          </h3>
+        </motion.div>
+
+        <div className="grid md:grid-cols-2 gap-3">
+          {certifications.map((cert, i) => (
+            <motion.div
+              key={cert.name}
+              variants={fadeUp} initial="hidden" whileInView="show" viewport={{ once: true }} custom={i}
+              className="rounded-xl border border-white/8 bg-white/3 p-4 flex items-start gap-3"
+            >
+              <img
+                src={cert.logo}
+                alt={cert.alt}
+                className="w-10 h-10 rounded-lg border border-white/8 object-contain bg-white shrink-0 p-1"
+              />
+              <p className="text-sm text-slate-300 leading-snug pt-1.5">{cert.name}</p>
+            </motion.div>
+          ))}
+        </div>
+      </section>
+
+      {/* ── CONTACT ──────────────────────────────────────────────────────── */}
+      <section id="contact" className="relative z-10 max-w-7xl mx-auto px-6 py-24">
+        <motion.div
+          variants={fadeUp} initial="hidden" whileInView="show" viewport={{ once: true }}
+        >
+          <p className="text-xs font-semibold uppercase tracking-widest text-slate-500 mb-4">Contact</p>
+          <h2 className="text-4xl font-black text-white mb-3">
+            Let&apos;s <span className="text-purple-400">connect</span>
+          </h2>
+          <p className="text-slate-400 mb-8 leading-relaxed max-w-2xl">
+            Open to AI/ML, foundation model, and GenAI roles. Whether you have an opportunity, a
+            collaboration in mind, or just want to say hi — my inbox is open.
+          </p>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-3">
+            {[
+              { icon: Mail, label: "krishnakoushikunnam1@gmail.com", href: "mailto:krishnakoushikunnam1@gmail.com" },
+              { icon: Linkedin, label: "linkedin.com/in/krishna-u225", href: "https://www.linkedin.com/in/krishna-u225/" },
+              { icon: Github, label: "github.com/krishnau225", href: "https://github.com/krishnau225" },
+              { icon: Phone, label: "(510) 516-3735", href: "tel:+15105163735" },
+              { icon: MapPin, label: "Menlo Park, CA", href: "#" },
+            ].map(({ icon: Icon, label, href }) => (
+              <a
+                key={label}
+                href={href}
+                target={href.startsWith("http") ? "_blank" : undefined}
+                rel={href.startsWith("http") ? "noopener noreferrer" : undefined}
+                className="flex items-center gap-3 px-4 py-3 rounded-xl border border-white/8 bg-white/3 hover:border-purple-500/40 hover:bg-purple-500/5 text-slate-300 hover:text-white transition-all text-sm min-w-0"
+              >
+                <Icon size={16} className="text-purple-400 shrink-0" />
+                <span className="truncate">{label}</span>
+              </a>
+            ))}
+          </div>
+        </motion.div>
+      </section>
+
+      {/* ── FOOTER ───────────────────────────────────────────────────────── */}
+      <footer className="relative z-10 border-t border-white/5 text-center py-6 text-xs text-slate-600">
+        © {new Date().getFullYear()} Krishna Koushik Unnam · Built with Next.js &amp; Tailwind CSS
+      </footer>
+    </main>
   );
 }

@@ -1,14 +1,8 @@
-import { MetadataRoute } from "next";
-
-// Next.js App Router auto-generates /robots.txt from this file.
-// Update the `url` base once you have a custom domain.
+import type { MetadataRoute } from "next";
 
 export default function robots(): MetadataRoute.Robots {
   return {
-    rules: {
-      userAgent: "*",
-      allow: "/",
-    },
+    rules: { userAgent: "*", allow: "/" },
     sitemap: "https://krishnakoushik.dev/sitemap.xml",
   };
 }

@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 340">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1a0a2e"/>
+      <stop offset="100%" style="stop-color:#2e1a0a"/>
+    </linearGradient>
+  </defs>
+  <rect width="600" height="340" fill="url(#bg)"/>
+  <!-- Left: photo-style box -->
+  <rect x="70"  y="80" width="170" height="140" rx="8" fill="none" stroke="#a855f7" stroke-width="1.5" opacity="0.5"/>
+  <rect x="80"  y="90" width="150" height="120" rx="6" fill="#1a0a2e" stroke="#7c3aed" stroke-width="1" opacity="0.5"/>
+  <text x="155" y="155" text-anchor="middle" fill="#c4b5fd" font-size="12" font-family="monospace" opacity="0.8">PHOTO</text>
+  <!-- Right: painting-style box -->
+  <rect x="360" y="80" width="170" height="140" rx="8" fill="none" stroke="#f97316" stroke-width="1.5" opacity="0.5"/>
+  <rect x="370" y="90" width="150" height="120" rx="6" fill="#2e1a0a" stroke="#ea580c" stroke-width="1" opacity="0.5"/>
+  <text x="445" y="155" text-anchor="middle" fill="#fdba74" font-size="12" font-family="monospace" opacity="0.8">MONET</text>
+  <!-- Arrows -->
+  <path d="M250 130 Q300 100 350 130" fill="none" stroke="#a855f7" stroke-width="1.5" marker-end="url(#arr)" opacity="0.6"/>
+  <path d="M350 170 Q300 200 250 170" fill="none" stroke="#f97316" stroke-width="1.5" opacity="0.6"/>
+  <text x="300" y="112" text-anchor="middle" fill="#c4b5fd" font-size="9" font-family="monospace" opacity="0.7">G: Photo→Monet</text>
+  <text x="300" y="196" text-anchor="middle" fill="#fdba74" font-size="9" font-family="monospace" opacity="0.7">F: Monet→Photo</text>
+  <!-- Title -->
+  <text x="300" y="260" text-anchor="middle" fill="white" font-size="22" font-weight="800" font-family="Arial, sans-serif">CycleGAN Translation</text>
+  <text x="300" y="282" text-anchor="middle" fill="#c4b5fd" font-size="11" font-family="monospace" opacity="0.7">Monet ↔ Photo · Ablation λ_cyc ∈ {5,10,20}</text>
+  <rect x="185" y="298" width="230" height="24" rx="5" fill="#a855f7" opacity="0.1" stroke="#a855f7" stroke-width="1" stroke-opacity="0.3"/>
+  <text x="300" y="314" text-anchor="middle" fill="#d8b4fe" font-size="10" font-family="monospace">PyTorch · CycleGAN · Identity Loss · GAN</text>
+</svg>
