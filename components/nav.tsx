@@ -49,7 +49,7 @@ export function Nav() {
           : "bg-transparent"
       }`}
     >
-      <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
+      <div className="max-w-[100rem] mx-auto px-6 sm:px-10 lg:px-14 xl:px-20 h-16 flex items-center justify-between">
         <a href="#home" className="text-xl sm:text-2xl font-extrabold tracking-tight">
           <span className="text-white">Krishna&apos;s </span>
           <span className="text-purple-400">Portfolio</span>

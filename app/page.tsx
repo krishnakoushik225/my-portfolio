@@ -20,8 +20,8 @@ import {
   Database,
   Cpu,
   Activity,
-  Boxes,
   Users,
+  Layers,
 } from "lucide-react";
 
 const fadeUp = {
@@ -61,32 +61,45 @@ const skillDomains = [
     alsoCls: "bg-white/5 text-slate-400 border border-white/8",
     core: [
       "PyTorch",
-      "Hugging Face Transformers",
-      "Foundation Models",
-      "MoE",
-      "RLHF / DPO / SFT",
-      "RAG",
-      "LangGraph",
-      "AI Agents / Agentic AI",
-    ],
-    also: [
       "TensorFlow",
       "Scikit-learn",
+      "Hugging Face Transformers",
+      "LLMs",
+      "Multimodal AI",
+      "Foundation Models",
+      "Mixture of Experts (MoE)",
+      "RLHF",
+      "DPO",
+      "SFT",
+      "AI Agents",
+      "Agentic AI",
       "LangChain",
+      "LangGraph",
       "LlamaIndex",
       "MCP",
       "Multi-Agent Systems",
-      "Tool / Function Calling",
-      "OpenCV / YOLO",
+    ],
+    also: [
+      "AI Agent Orchestration",
+      "Tool Calling",
+      "Function Calling",
+      "Workflow Automation",
+      "RAG",
+      "Embedding Models",
+      "Vector Search",
+      "Computer Vision",
+      "OpenCV",
+      "YOLO",
       "XGBoost",
-      "LoRA / PEFT",
+      "LoRA",
+      "PEFT",
       "Prompt Engineering",
       "Knowledge Distillation",
     ],
   },
   {
     id: "training",
-    label: "DISTRIBUTED TRAINING & SERVING",
+    label: "DISTRIBUTED TRAINING & MODEL SERVING",
     tabLabel: "Training & Serving",
     border: "#06b6d4",
     icon: <Cpu size={15} />,
@@ -94,16 +107,24 @@ const skillDomains = [
     labelCls: "text-cyan-400",
     coreCls: "bg-cyan-500/20 text-cyan-300 border border-cyan-500/30",
     alsoCls: "bg-white/5 text-slate-400 border border-white/8",
-    core: ["FSDP", "DeepSpeed", "Megatron-LM", "vLLM", "TensorRT-LLM"],
-    also: [
+    core: [
       "PyTorch Distributed",
+      "FSDP",
+      "DeepSpeed",
+      "Megatron-LM",
       "Ray",
       "NCCL",
+      "vLLM",
+      "TensorRT-LLM",
+    ],
+    also: [
       "Model Quantization",
-      "Tensor / Pipeline / Data Parallelism",
       "GPU Optimization",
       "Distributed Inference",
       "HPC",
+      "Tensor Parallelism",
+      "Pipeline Parallelism",
+      "Data Parallelism",
     ],
   },
   {
@@ -118,12 +139,13 @@ const skillDomains = [
     alsoCls: "bg-white/5 text-slate-400 border border-white/8",
     core: ["Apache Spark", "Databricks", "Apache Airflow", "Apache Kafka", "ETL Pipelines"],
     also: [
+      "Data Processing",
       "Feature Engineering",
-      "Data Validation / Quality",
+      "Data Validation",
+      "Data Quality",
       "Synthetic Data Generation",
       "Streaming Data Pipelines",
       "IoT Data Processing",
-      "Apache Iceberg / Parquet / Delta Lake",
     ],
   },
   {
@@ -136,14 +158,14 @@ const skillDomains = [
     labelCls: "text-blue-400",
     coreCls: "bg-blue-500/20 text-blue-300 border border-blue-500/30",
     alsoCls: "bg-white/5 text-slate-400 border border-white/8",
-    core: ["AWS", "Microsoft Azure", "GCP", "Kubernetes", "Docker"],
-    also: [
-      "SageMaker / Glue / Lambda / EKS / IoT Core",
-      "Spring Boot",
-      "REST APIs / Microservices",
-      "Service Mesh",
-      "Terraform / IaC",
+    core: [
+      "AWS (S3, SageMaker, Glue, Lambda, EKS, IoT Core)",
+      "Microsoft Azure",
+      "Google Cloud Platform (GCP)",
+      "Kubernetes",
+      "Docker",
     ],
+    also: ["Service Mesh", "Infrastructure as Code (IaC)", "Terraform"],
   },
   {
     id: "mlops",
@@ -155,43 +177,60 @@ const skillDomains = [
     labelCls: "text-green-400",
     coreCls: "bg-green-500/20 text-green-300 border border-green-500/30",
     alsoCls: "bg-white/5 text-slate-400 border border-white/8",
-    core: ["MLflow", "GitHub Actions", "ArgoCD", "CI/CD", "Model Monitoring"],
+    core: ["MLflow", "Git", "GitHub Actions", "CI/CD", "ArgoCD", "Pytest", "Model Deployment", "Model Versioning"],
     also: [
-      "Pytest",
+      "Model Monitoring",
+      "Experiment Tracking",
       "Prometheus",
       "Grafana",
       "OpenTelemetry",
-      "Experiment Tracking",
-      "Feature Stores",
-      "Model Versioning / Deployment",
       "Kubernetes Operations",
+      "Feature Stores",
+      "AI Application Deployment",
     ],
   },
   {
-    id: "eval",
-    label: "MODEL EVALUATION",
-    tabLabel: "Evaluation",
-    border: "#ef4444",
-    icon: <Activity size={15} />,
-    iconCls: "bg-red-500/15 text-red-400",
-    labelCls: "text-red-400",
-    coreCls: "bg-red-500/20 text-red-300 border border-red-500/30",
+    id: "backend",
+    label: "BACKEND, APIS & APPLICATION DEVELOPMENT",
+    tabLabel: "Backend & APIs",
+    border: "#ec4899",
+    icon: <Layers size={15} />,
+    iconCls: "bg-pink-500/15 text-pink-400",
+    labelCls: "text-pink-400",
+    coreCls: "bg-pink-500/20 text-pink-300 border border-pink-500/30",
     alsoCls: "bg-white/5 text-slate-400 border border-white/8",
-    core: ["MMLU", "GPQA", "HumanEval", "MT-Bench", "Custom Benchmarking"],
-    also: ["A/B Testing", "Explainable AI (XAI)", "LangSmith", "Performance Optimization"],
+    core: ["FastAPI", "Spring Boot", "React", "REST APIs", "Microservices"],
+    also: ["gRPC", "SSE"],
   },
   {
-    id: "datastores",
-    label: "DATABASES, VECTOR STORES & ANALYTICS",
-    tabLabel: "Databases & Vectors",
+    id: "eval-data",
+    label: "EVALUATION, DATABASES, VECTOR STORES & ANALYTICS",
+    tabLabel: "Eval & Data Stores",
     border: "#14b8a6",
-    icon: <Boxes size={15} />,
+    icon: <Activity size={15} />,
     iconCls: "bg-teal-500/15 text-teal-400",
     labelCls: "text-teal-400",
     coreCls: "bg-teal-500/20 text-teal-300 border border-teal-500/30",
     alsoCls: "bg-white/5 text-slate-400 border border-white/8",
-    core: ["PostgreSQL", "pgvector", "Pinecone", "FAISS", "Redis"],
-    also: ["MySQL", "Power BI", "Embedding Models", "Hybrid / Dense Retrieval"],
+    core: [
+      "MMLU",
+      "GPQA",
+      "HumanEval",
+      "Custom Model Benchmarking",
+      "PostgreSQL",
+      "pgvector",
+      "Pinecone",
+      "Redis",
+      "FAISS",
+    ],
+    also: [
+      "A/B Testing",
+      "MySQL",
+      "Power BI",
+      "Performance Optimization",
+      "Explainable AI (XAI)",
+      "LangSmith",
+    ],
   },
   {
     id: "professional",
@@ -206,16 +245,18 @@ const skillDomains = [
     core: [
       "System Design",
       "Distributed Systems",
-      "Technical Leadership",
       "Cross-Functional Collaboration",
-      "Project Ownership",
+      "Technical Leadership",
+      "Analytical Thinking",
     ],
     also: [
       "Agile Development",
       "Mentoring",
+      "Project Ownership",
       "Documentation",
       "Debugging",
-      "Analytical Thinking",
+      "Innovation",
+      "Time Management",
       "Continuous Learning",
     ],
   },
@@ -229,21 +270,21 @@ const filterTabs = ["All Domains", ...skillDomains.map((d) => d.tabLabel)];
 const workCards = [
   {
     company: "Meta — Multimodal Foundation Models",
-    desc: "AI/ML Engineer building large-scale multimodal foundation model training, alignment, RAG, agentic platforms, and inference serving for hundreds of millions of daily requests across hyperscale GPU infrastructure.",
+    desc: "AI/ML Engineer building large-scale multimodal foundation model training, MoE optimization, RLHF/DPO alignment, RAG, agentic platforms, and inference serving more than 600 million global users daily across AWS, Azure, GCP, and hyperscale private data centers.",
     achievements: [
-      "Led distributed multimodal foundation model training with Python, PyTorch, Hugging Face Transformers, NCCL, and Megatron-LM — processing trillion-token datasets and improving reasoning/coding benchmark accuracy 18%",
-      "Optimized MoE architectures with CUDA, DeepSpeed, FSDP, and tensor/pipeline/expert parallelism — cut distributed training time 32% while maximizing GPU utilization",
-      "Shipped SFT, RLHF, reward models, and DPO alignment pipelines (+21% human eval scores); RAG with FAISS/hybrid search (+24% retrieval accuracy); and vLLM / TensorRT-LLM inference (−35% cost)",
-      "Built Spark/Ray/Airflow/Iceberg data platforms, MLflow/ArgoCD/OpenTelemetry LLMOps, and Azure OpenAI + LangGraph + Semantic Kernel agentic systems for enterprise production",
+      "Developed multimodal foundation model training pipelines with Python, PyTorch, Transformers, and distributed GPU infrastructure — processing trillions of tokens and improving reasoning/coding benchmark accuracy 18%",
+      "Built MoE architectures with PyTorch, CUDA, FSDP, and Megatron-LM — optimizing expert routing and cutting training time 32%; implemented RLHF/DPO preference optimization (+21% human eval scores)",
+      "Designed Spark/Ray/Airflow data pipelines for petabyte-scale multimodal datasets; shipped FAISS RAG (+24% response accuracy) and evaluation frameworks with MMLU, GPQA, HumanEval, and custom benchmarks",
+      "Deployed vLLM / TensorRT-LLM inference (−35% cost), containerized AI microservices on Docker/Kubernetes for 600M+ daily users, and MLOps/CI/CD with MLflow, GitHub Actions, ArgoCD, Prometheus, and Grafana; built agentic AI platforms with RAG, workflow orchestration, and tool-calling",
     ],
   },
   {
     company: "Accenture — Industrial AI & MLOps",
-    desc: "AI/ML Engineer delivering predictive maintenance, computer vision, digital twins, and cloud-native ML platforms for manufacturing — from petabyte-scale sensor data through real-time scoring APIs.",
+    desc: "Machine Learning Engineer delivering predictive maintenance, computer vision, digital twins, and cloud-native ML platforms for manufacturing — from billions of sensor records through real-time scoring APIs.",
     achievements: [
-      "Built Python predictive maintenance pipelines over streaming IoT data from 15,000+ industrial assets — cutting unplanned downtime 32% and improving failure prediction accuracy 21% for 5,000+ users",
+      "Developed Python predictive maintenance pipelines over real-time IoT data from 15,000+ industrial assets — cutting unplanned downtime 32%; built TensorFlow/XGBoost models improving failure prediction accuracy 21% for 5,000+ users",
       "Optimized real-time inference via feature engineering, model tuning, and MLflow — 38% lower prediction latency and 27% lower annual cloud inference cost",
-      "Shipped CV inspection with OpenCV/PyTorch/YOLO; Spark/Databricks/Delta Lake workflows; AWS SageMaker/Glue/Lambda/EKS platforms; and Spring Boot & FastAPI real-time inference microservices",
+      "Shipped CV inspection with OpenCV/PyTorch/YOLO; Spark/Databricks workflows; AWS S3/Glue/Lambda/SageMaker platforms; Spring Boot & FastAPI scoring microservices on EKS; digital twins with AWS IoT Core; and Power BI executive dashboards",
     ],
   },
 ];
@@ -350,15 +391,15 @@ const timeline = [
     period: "Feb 2025 — Present",
     location: "Menlo Park, CA",
     logo: "/companies/meta.png",
-    desc: "Lead distributed multimodal foundation model training, MoE optimization, SFT/RLHF/DPO alignment, RAG systems, LLMOps, and high-throughput inference (vLLM, TensorRT-LLM) — collaborating with researchers and infrastructure teams to productionize models for global AI platforms.",
+    desc: "Develop large-scale multimodal foundation model training, MoE architectures, RLHF/DPO alignment, RAG systems, evaluation frameworks, MLOps, and high-throughput inference (vLLM, TensorRT-LLM) — serving more than 600 million global users daily across AWS, Azure, GCP, and hyperscale private data centers.",
   },
   {
-    role: "AI/ML Engineer",
+    role: "Machine Learning Engineer",
     company: "Accenture",
     period: "Mar 2021 — Jun 2024",
     location: "India",
     logo: "/companies/accenture.png",
-    desc: "Built industrial AI spanning predictive maintenance on 15,000+ IoT assets, computer vision inspection (YOLO), digital twins, Spark/Databricks/Delta Lake platforms, and AWS SageMaker MLOps — delivering real-time inference APIs with Java/Spring Boot and FastAPI.",
+    desc: "Built industrial ML spanning predictive maintenance on 15,000+ IoT assets, computer vision inspection (YOLO), digital twins, Spark/Databricks platforms, and AWS SageMaker MLOps — delivering real-time scoring APIs with Java/Spring Boot and FastAPI, plus Power BI stakeholder dashboards.",
   },
 ];
 
@@ -372,24 +413,24 @@ const education = [
 
 const certifications = [
   {
-    name: "AWS Certified Machine Learning Engineer – Associate (MLA-C01)",
+    name: "AWS Certified Generative AI Developer – Professional (AIP-C01)",
     logo: "/companies/aws.jpg",
     alt: "AWS",
-  },
-  {
-    name: "AWS Certified AI Practitioner",
-    logo: "/companies/aws.jpg",
-    alt: "AWS",
-  },
-  {
-    name: "Microsoft Certified: Azure AI Engineer Associate",
-    logo: "/companies/microsoft.png",
-    alt: "Microsoft",
   },
   {
     name: "Databricks Certified Machine Learning Professional",
     logo: "/companies/databricks.png",
     alt: "Databricks",
+  },
+  {
+    name: "Certified Kubernetes Application Developer (CKAD)",
+    logo: "/companies/kubernetes.svg",
+    alt: "Kubernetes",
+  },
+  {
+    name: "Microsoft Certified: Azure AI Apps and Agents Developer Associate (AI-103)",
+    logo: "/companies/microsoft.png",
+    alt: "Microsoft",
   },
 ];
 
@@ -414,12 +455,12 @@ export default function Home() {
       {/* ── HERO ─────────────────────────────────────────────────────────── */}
       <section
         id="home"
-        className="relative z-10 min-h-screen flex items-center max-w-7xl mx-auto px-6 pt-16"
+        className="relative z-10 min-h-[100dvh] flex items-center w-full max-w-[100rem] mx-auto px-6 sm:px-10 lg:px-14 xl:px-20 pt-16"
       >
-        <div className="w-full grid lg:grid-cols-2 gap-12 items-stretch py-16">
+        <div className="w-full grid lg:grid-cols-[minmax(0,1fr)_28rem] gap-8 xl:gap-14 items-center py-8 lg:py-10">
 
           {/* Left */}
-          <div className="text-left flex flex-col">
+          <div className="text-left flex flex-col min-w-0">
             <motion.p
               variants={fadeUp} initial="hidden" animate="show" custom={0}
               className="text-slate-100 text-xl sm:text-2xl font-semibold mb-3"
@@ -452,14 +493,14 @@ export default function Home() {
 
             <motion.h1
               variants={fadeUp} initial="hidden" animate="show" custom={2}
-              className="text-[2.75rem] sm:text-5xl lg:text-[3.5rem] xl:text-[3.75rem] font-bold text-white leading-[1.08] tracking-[-0.02em] mb-6"
+              className="text-[2.75rem] sm:text-5xl lg:text-[3.5rem] xl:text-[3.75rem] font-bold text-white leading-[1.08] tracking-[-0.02em] mb-6 max-w-4xl"
             >
               I train and ship large-scale AI systems that run in production.
             </motion.h1>
 
             <motion.p
               variants={fadeUp} initial="hidden" animate="show" custom={3}
-              className="text-slate-400 text-[15px] sm:text-base font-normal leading-[1.65] mb-6 max-w-lg"
+              className="text-slate-400 text-[15px] sm:text-base font-normal leading-[1.65] mb-6 max-w-2xl"
             >
               AI/ML Engineer with 5+ years designing, training, and deploying foundation models,
               multimodal LLMs, RAG, RLHF, and enterprise ML — from GPU clusters to cloud inference
@@ -468,7 +509,7 @@ export default function Home() {
 
             <motion.div
               variants={fadeUp} initial="hidden" animate="show" custom={3.5}
-              className="flex items-start gap-2.5 p-4 rounded-xl border border-white/8 bg-white/[0.03] mb-8 max-w-lg"
+              className="flex items-start gap-2.5 p-4 rounded-xl border border-white/8 bg-white/[0.03] mb-8 max-w-2xl"
             >
               <BookOpen size={16} className="text-purple-400 shrink-0 mt-0.5" />
               <p className="text-[13px] sm:text-sm text-slate-400 font-normal leading-relaxed">
@@ -522,12 +563,12 @@ export default function Home() {
             </motion.div>
           </div>
 
-          {/* Right — Profile Card (matches left column height) */}
+          {/* Right — Profile Card (fixed width/height; does not stretch with layout) */}
           <motion.div
             variants={fadeUp} initial="hidden" animate="show" custom={2}
-            className="hidden lg:flex h-full min-h-0"
+            className="hidden lg:flex justify-end"
           >
-            <div className="w-full max-w-md ml-auto h-full flex flex-col rounded-2xl border border-white/10 bg-[#12122a]/80 backdrop-blur-sm overflow-hidden">
+            <div className="w-full max-w-md h-[36rem] flex flex-col rounded-2xl border border-white/10 bg-[#12122a]/80 backdrop-blur-sm overflow-hidden">
               <div className="flex items-center justify-between px-5 py-3.5 shrink-0">
                 <span className="text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-400">
                   Overview
@@ -537,7 +578,7 @@ export default function Home() {
                 </span>
               </div>
               <div className="flex-1 min-h-0 px-4 pb-4 flex flex-col">
-                <div className="rounded-2xl bg-white overflow-hidden flex-1 min-h-[14rem] flex items-center justify-center">
+                <div className="rounded-2xl bg-white overflow-hidden flex-1 min-h-0 flex items-center justify-center">
                   <img
                     src="/avatar.png"
                     alt="Krishna Koushik Unnam"
@@ -561,7 +602,7 @@ export default function Home() {
       </section>
 
       {/* ── ABOUT ────────────────────────────────────────────────────────── */}
-      <section id="about" className="relative z-10 max-w-7xl mx-auto px-6 py-24">
+      <section id="about" className="relative z-10 max-w-[100rem] mx-auto px-6 sm:px-10 lg:px-14 xl:px-20 py-24">
         <div className="grid lg:grid-cols-2 gap-16 items-start">
           <motion.div
             variants={fadeUp} initial="hidden" whileInView="show" viewport={{ once: true }}
@@ -603,7 +644,7 @@ export default function Home() {
       </section>
 
       {/* ── TECH STACK ───────────────────────────────────────────────────── */}
-      <section id="skills" className="relative z-10 max-w-7xl mx-auto px-6 py-24">
+      <section id="skills" className="relative z-10 max-w-[100rem] mx-auto px-6 sm:px-10 lg:px-14 xl:px-20 py-24">
         <motion.div
           variants={fadeUp} initial="hidden" whileInView="show" viewport={{ once: true }}
           className="mb-10"
@@ -660,16 +701,16 @@ export default function Home() {
           ))}
         </motion.div>
 
-        {/* Skill cards */}
-        <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+        {/* Skill cards — uniform height matches densest first-row tile */}
+        <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3 items-stretch">
           {visibleDomains.map((domain, i) => (
             <motion.div
               key={domain.id}
               variants={fadeUp} initial="hidden" whileInView="show" viewport={{ once: true }} custom={i}
-              className="rounded-xl border border-white/8 bg-white/3 p-5 relative overflow-hidden"
+              className="rounded-xl border border-white/8 bg-white/3 p-5 relative flex h-[34rem] flex-col overflow-hidden md:h-[36rem] lg:h-[38rem]"
               style={{ borderLeft: `3px solid ${domain.border}` }}
             >
-              <div className="flex items-start justify-between mb-4">
+              <div className="flex items-start justify-between mb-4 shrink-0">
                 <div className="flex items-center gap-2.5">
                   <div className={`w-7 h-7 rounded-lg flex items-center justify-center ${domain.iconCls}`}>
                     {domain.icon}
@@ -683,22 +724,28 @@ export default function Home() {
                 </span>
               </div>
 
-              <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-500 mb-2">Core</p>
-              <div className="flex flex-wrap gap-1.5 mb-4">
-                {domain.core.map((s) => (
-                  <span key={s} className={`px-2 py-0.5 rounded-md text-xs font-medium ${domain.coreCls}`}>
-                    {s}
-                  </span>
-                ))}
-              </div>
+              <div className="flex min-h-0 flex-1 flex-col overflow-y-auto">
+                <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-500 mb-2">Core</p>
+                <div className="flex flex-wrap gap-1.5 mb-4">
+                  {domain.core.map((s) => (
+                    <span key={s} className={`px-2 py-0.5 rounded-md text-xs font-medium ${domain.coreCls}`}>
+                      {s}
+                    </span>
+                  ))}
+                </div>
 
-              <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-500 mb-2">Also Used</p>
-              <div className="flex flex-wrap gap-1.5">
-                {domain.also.map((s) => (
-                  <span key={s} className={`px-2 py-0.5 rounded-md text-xs ${domain.alsoCls}`}>
-                    {s}
-                  </span>
-                ))}
+                {domain.also.length > 0 && (
+                  <>
+                    <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-500 mb-2">Also Used</p>
+                    <div className="flex flex-wrap gap-1.5">
+                      {domain.also.map((s) => (
+                        <span key={s} className={`px-2 py-0.5 rounded-md text-xs ${domain.alsoCls}`}>
+                          {s}
+                        </span>
+                      ))}
+                    </div>
+                  </>
+                )}
               </div>
             </motion.div>
           ))}
@@ -706,7 +753,7 @@ export default function Home() {
       </section>
 
       {/* ── WORK ─────────────────────────────────────────────────────────── */}
-      <section id="work" className="relative z-10 max-w-7xl mx-auto px-6 py-24">
+      <section id="work" className="relative z-10 max-w-[100rem] mx-auto px-6 sm:px-10 lg:px-14 xl:px-20 py-24">
         <motion.div
           variants={fadeUp} initial="hidden" whileInView="show" viewport={{ once: true }}
           className="mb-12"
@@ -750,7 +797,7 @@ export default function Home() {
       </section>
 
       {/* ── PROJECTS ─────────────────────────────────────────────────────── */}
-      <section id="projects" className="relative z-10 max-w-7xl mx-auto px-6 py-24">
+      <section id="projects" className="relative z-10 max-w-[100rem] mx-auto px-6 sm:px-10 lg:px-14 xl:px-20 py-24">
         <motion.div
           variants={fadeUp} initial="hidden" whileInView="show" viewport={{ once: true }}
           className="mb-12"
@@ -830,7 +877,7 @@ export default function Home() {
       </section>
 
       {/* ── EXPERIENCE ───────────────────────────────────────────────────── */}
-      <section id="experience" className="relative z-10 max-w-7xl mx-auto px-6 py-24">
+      <section id="experience" className="relative z-10 max-w-[100rem] mx-auto px-6 sm:px-10 lg:px-14 xl:px-20 py-24">
         {/* Company logos strip */}
         <motion.div
           variants={fadeUp} initial="hidden" whileInView="show" viewport={{ once: true }}
@@ -962,7 +1009,7 @@ export default function Home() {
       </section>
 
       {/* ── CONTACT ──────────────────────────────────────────────────────── */}
-      <section id="contact" className="relative z-10 max-w-7xl mx-auto px-6 py-24">
+      <section id="contact" className="relative z-10 max-w-[100rem] mx-auto px-6 sm:px-10 lg:px-14 xl:px-20 py-24">
         <motion.div
           variants={fadeUp} initial="hidden" whileInView="show" viewport={{ once: true }}
         >
